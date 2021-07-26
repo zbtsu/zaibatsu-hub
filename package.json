@@ -2,7 +2,12 @@
   "name": "zaibatsu-hub",
   "version": "1.0.0",
   "main": "index.js",
+  "private": true,
   "repository": "The complete, essential tool bag for Tekken.",
   "author": "Alek Angelov <alek.angelov.sk@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "workspaces": [
+    "packages/combo-suite",
+    "packages/zaibatsu-hub"
+  ]
 }
