@@ -8,6 +8,6 @@
   "license": "MIT",
   "workspaces": [
     "packages/combo-suite",
-    "packages/zaibatsu-hub"
+    "packages/client"
   ]
 }

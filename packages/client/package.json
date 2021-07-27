@@ -1,0 +1,118 @@
+{
+  "name": "@zbtsu/client",
+  "version": "0.1.0",
+  "private": true,
+  "main": "./build/electron/main.js",
+  "homepage": ".",
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.11.4",
+    "@testing-library/react": "^11.1.0",
+    "@testing-library/user-event": "^12.1.10",
+    "electron-log": "^4.4.0",
+    "electron-store": "^8.0.0",
+    "electron-updater": "^4.3.9",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "styled-components": "^5.3.0",
+    "web-vitals": "^1.0.1"
+  },
+  "scripts": {
+    "build": "craco build",
+    "start": "cross-env ELECTRON_ENABLE_LOGGING=true && nf start -p 5000",
+    "test": "craco test",
+    "build:electron": "env-cmd -f ./production.env tsc --project electron/tsconfig.json",
+    "start:electron": "env-cmd -f ./development.env ts-node --skip-project electron/connect-electron.ts",
+    "watch:electron": "env-cmd -f ./development.env tsc --watch --project electron/tsconfig.json",
+    "start:react": "env-cmd -f ./development.env craco start",
+    "dist": "yarn pre:dist && electron-builder build -mwl -c.extraMetadata.main=build/electron/main.js --publish \"onTag\"",
+    "pre:dist": "env-cmd -f ./production.env npm run build && npm run build:electron"
+  },
+  "eslintConfig": {
+    "extends": [
+      "react-app",
+      "react-app/jest"
+    ]
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "build": {
+    "productName": "Zaibatsu Bud",
+    "appId": "com.alekangelov.ZaibatsuBud",
+    "publish": "github",
+    "dmg": {
+      "contents": [
+        {
+          "x": 410,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        },
+        {
+          "x": 130,
+          "y": 150,
+          "type": "file"
+        }
+      ]
+    },
+    "protocols": {
+      "name": "zaibatsu-protocol",
+      "schemes": [
+        "zaibatsu"
+      ]
+    },
+    "appImage": {
+      "license": "LICENSE"
+    },
+    "nsis": {
+      "guid": "3478dad0-f768-412b-b7f3-a18e481e7f9b",
+      "oneClick": true,
+      "perMachine": true,
+      "license": "LICENSE"
+    },
+    "directories": {
+      "buildResources": "public"
+    },
+    "fileAssociations": [
+      {
+        "name": "Zaibatsu Combo",
+        "description": "Combo file for Tekken 7",
+        "icon": "file_icon.icns",
+        "role": "Editor",
+        "ext": "zaic"
+      }
+    ]
+  },
+  "devDependencies": {
+    "@craco/craco": "^6.2.0",
+    "@types/electron-config": "^3.2.2",
+    "@types/jest": "^26.0.15",
+    "@types/node": "^16.4.3",
+    "@types/react": "^17.0.0",
+    "@types/react-dom": "^17.0.0",
+    "@types/styled-components": "^5.1.11",
+    "@types/testing-library__dom": "^7.5.0",
+    "craco-esbuild": "^0.3.3",
+    "electron": "^13.1.7",
+    "electron-builder": "^22.11.7",
+    "electron-devtools-installer": "^3.2.0",
+    "env-cmd": "^10.1.0",
+    "foreman": "^3.0.1",
+    "nodemon": "^2.0.12",
+    "react-scripts": "4.0.3",
+    "sass": "^1.36.0",
+    "ts-node": "^10.1.0",
+    "tsc": "^2.0.3",
+    "typescript": "^4.3.5",
+    "wait-on": "^6.0.0"
+  }
+}

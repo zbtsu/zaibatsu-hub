@@ -27,7 +27,7 @@
     "icons": "rimraf ./src/components/icons && yarn svgr ./src/images/icons --ext tsx --out-dir ./src/components/icons --index-template ./svgr-index.js --template ./svgr-template.js --filename-case kebab"
   },
   "peerDependencies": {
-    "react": "^16.0.0"
+    "react": "^17.0.2"
   },
   "devDependencies": {
     "@rollup/plugin-image": "^2.0.6",
@@ -44,7 +44,6 @@
     "babel-eslint": "^10.0.3",
     "change-case": "^4.1.2",
     "cross-env": "^7.0.2",
-    "eslint": "^6.8.0",
     "eslint-config-prettier": "^6.7.0",
     "eslint-config-standard": "^14.1.0",
     "eslint-config-standard-react": "^9.2.0",
@@ -58,9 +57,9 @@
     "microbundle-crl": "^0.13.10",
     "npm-run-all": "^4.1.5",
     "prettier": "^2.0.4",
-    "react": "^16.13.1",
-    "react-dom": "^16.13.1",
-    "react-scripts": "^3.4.1",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
+    "react-scripts": "^4.0.3",
     "rimraf": "^3.0.2",
     "typescript": "^3.7.5"
   },
