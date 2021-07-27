@@ -2,6 +2,7 @@ import React from "react";
 import { ThemeProvider } from "styled-components";
 import { TopBar } from "./components/TopBar";
 import { GlobalStyle } from "./styles";
+import { AppContainer } from "./styles/Grid";
 
 function App() {
   return (
@@ -21,8 +22,10 @@ function App() {
         borderRadius: 0,
       }}
     >
-      <GlobalStyle />
-      <TopBar />
+      <AppContainer>
+        <GlobalStyle />
+        <TopBar />
+      </AppContainer>
     </ThemeProvider>
   );
 }
