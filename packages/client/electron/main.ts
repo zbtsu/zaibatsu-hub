@@ -29,9 +29,9 @@ const DEFAULTS: Electron.BrowserWindowConstructorOptions = {
   width: DIMENSIONS.W,
   height: DIMENSIONS.H,
   frame: false,
-  transparent: true,
+  // transparent: true,
   webPreferences: {
-    allowRunningInsecureContent: true,
+    allowRunningInsecureContent: false,
     nodeIntegration: true,
     contextIsolation: false,
   },

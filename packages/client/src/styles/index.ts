@@ -20,5 +20,10 @@ export const GlobalStyle = createGlobalStyle`
 
   * {
     box-sizing: border-box;
+    font-family: 'Inter';
+  }
+  iframe {
+    width: 0% !important;
+    height: 0% !important;
   }
 `;

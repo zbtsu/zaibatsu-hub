@@ -1,6 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import { Column, Row } from "../../styles/Grid";
+import { hexToRgb } from "../../utils/hextorgb";
 import Close from "./icons/Close";
 import Maximize from "./icons/Maximize";
 import Minimize from "./icons/Minimize";
@@ -11,9 +12,6 @@ const Wrapper = styled.div`
   -webkit-app-region: drag;
   font-size: ${({ theme }) => theme.fontSize[1]};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
-  position: fixed;
-  left: 0;
-  top: 0;
   z-index: 100;
 `;
 
@@ -25,8 +23,8 @@ const Brand = styled.div`
 `;
 
 const BrandImage = styled.img`
-  width: ${({ theme }) => theme.space[3]};
-  height: ${({ theme }) => theme.space[3]};
+  width: 22px;
+  height: 22px;
   object-fit: contain;
 `;
 
@@ -44,9 +42,29 @@ const TopIconButton = styled.button<{ close?: boolean }>`
   background: none;
   border: none;
   cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  transition: ${(props) => props.theme.transition("background")};
+  svg {
+    transition: ${(props) => props.theme.transition("fill")};
+    * {
+      fill: ${({ theme }) => theme.colors.text};
+    }
+  }
   &:hover {
     background: ${({ close, theme }) =>
-      close ? theme.colors.error : theme.colors.background};
+      close
+        ? theme.colors.error
+        : `rgba(${hexToRgb(theme.colors.text, true)},0.1)`};
+    ${({ close }) =>
+      close &&
+      `svg {
+          path {
+            fill: white;
+          }
+        }`}
   }
 `;
 
@@ -60,7 +78,7 @@ export const TopBar = () => {
             <BrandText>Zaibatsu Hub</BrandText>
           </Brand>
         </Column>
-        <Column fitContent>
+        <Column fitContent height="100%">
           <Row gutter="0">
             <Column fitContent>
               <TopIconButton>

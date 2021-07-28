@@ -13,8 +13,10 @@ declare module "styled-components" {
       background: string;
       border: string;
     };
+    shadow: string[];
     space: string[];
     borderRadius: number;
     fontSize: string[];
+    transition: (...args: string[]) => string;
   }
 }

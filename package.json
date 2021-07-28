@@ -6,6 +6,9 @@
   "repository": "The complete, essential tool bag for Tekken.",
   "author": "Alek Angelov <alek.angelov.sk@gmail.com>",
   "license": "MIT",
+  "scripts": {
+    "client:start": "yarn workspace @zbtsu/client start"
+  },
   "workspaces": [
     "packages/combo-suite",
     "packages/client"
