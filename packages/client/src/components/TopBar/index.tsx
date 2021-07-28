@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { useAppSelector } from "../../global/hooks";
 import { Column, Row } from "../../styles/Grid";
 import { hexToRgb } from "../../utils/hextorgb";
 import Close from "./icons/Close";
@@ -68,7 +69,15 @@ const TopIconButton = styled.button<{ close?: boolean }>`
   }
 `;
 
+const Avatar = styled.img`
+  width: 24px;
+  height: 24px;
+  object-fit: cover;
+  margin-right: ${({ theme }) => theme.space[1]};
+`;
+
 export const TopBar = () => {
+  const userPhoto = useAppSelector((state) => state.firebase?.auth?.photoURL);
   return (
     <Wrapper>
       <Row justify="space-between" align="stretch">
@@ -79,7 +88,15 @@ export const TopBar = () => {
           </Brand>
         </Column>
         <Column fitContent height="100%">
-          <Row gutter="0">
+          <Row gutter="0" align="stretch">
+            {userPhoto && (
+              <Column fitContent>
+                <Row height="100%" align="center" justify="center">
+                  <Avatar src={userPhoto} />
+                </Row>
+              </Column>
+            )}
+
             <Column fitContent>
               <TopIconButton>
                 <Minimize />
