@@ -1,23 +1,27 @@
-import React from "react";
+import React, { useCallback } from "react";
 import styled from "styled-components";
+import { down } from "styled-breakpoints";
 import { animated, useSpring } from "@react-spring/web";
 import { Column, Row } from "../../styles/Grid";
-import { hexToRgb } from "../../utils/hextorgb";
 import { Home, Game, Share, Guide, Login, Settings } from "./icons";
+import { useHistory } from "react-router-dom";
 
 const Wrapper = styled.div`
   border-right: 1px solid ${(props) => props.theme.colors.border};
-  width: 100px;
+  width: 92px;
   display: flex;
   flex-flow: column;
   height: 100%;
+  ${down("md")} {
+    width: ${(props) => props.theme.space[5]};
+  }
 `;
 
 type IconRoute = {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => any;
   route?: string;
   title: string;
-  icon: React.ReactNode;
+  icon: React.FC;
 };
 
 const sideBar: IconRoute[] = [
@@ -47,7 +51,7 @@ const bottomBar: IconRoute[] = [
   {
     icon: Login,
     // route: "/combos",
-    title: "Combos",
+    title: "Login",
   },
   {
     icon: Settings,
@@ -61,6 +65,16 @@ const IconHolder = styled.span`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
+  width: 100%;
+  svg {
+    width: ${(props) => props.theme.space[3]};
+    height: ${(props) => props.theme.space[3]};
+    object-fit: contain;
+    ${down("md")} {
+      width: ${(props) => props.theme.space[2]};
+      height: ${(props) => props.theme.space[2]};
+    }
+  }
 `;
 
 const ToolTip = styled.span`
@@ -69,12 +83,15 @@ const ToolTip = styled.span`
   top: 50%;
   opacity: 0;
   transform: translate(50%, -50%);
-  display: "none";
+  display: none;
   transform: translate(0, -50%);
   background: ${(props) => props.theme.colors.background};
   padding: ${(props) => props.theme.space[1]} ${(props) => props.theme.space[2]};
   border: 1px solid ${(props) => props.theme.colors.border};
   box-shadow: ${(props) => props.theme.shadow[2]};
+  ${down("md")} {
+    display: none !important;
+  }
 `;
 
 const AToolTip = animated(ToolTip);
@@ -94,8 +111,9 @@ const Button = styled.button<ButtonProps>`
   width: 100%;
   padding-top: 100%;
   position: relative;
-  border-${(props) => (props.bottom ? "top" : "bottom")}: 1px solid ${(props) =>
-  props.theme.colors.border};
+  ${(props) => (props.bottom ? "border-top" : "border-bottom")}: 1px solid ${(
+    props
+  ) => props.theme.colors.border};
   transition: ${(props) => props.theme.transition("background")};
   &:hover {
     background: ${(props) => props.theme.colors.border};
@@ -129,11 +147,16 @@ const IconButton = ({ icon: Icon, route, title, bottom }: IIconButton) => {
       return next({ display: "none" });
     },
   });
+  const { push } = useHistory();
+  const onClick = useCallback(() => {
+    if (route) return push(route);
+  }, [route, push]);
   return (
     <Button
       bottom={bottom}
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
+      onClick={onClick}
     >
       <AToolTip style={spring}>{title}</AToolTip>
       <IconHolder>

@@ -34,6 +34,7 @@ const DEFAULTS: Electron.BrowserWindowConstructorOptions = {
     allowRunningInsecureContent: false,
     nodeIntegration: true,
     contextIsolation: false,
+    nativeWindowOpen: true,
   },
 };
 

@@ -1,6 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Column, Row } from "../../styles/Grid";
 import { Scrollbars } from "react-custom-scrollbars";
 import { hexToRgb } from "../../utils/hextorgb";
 
@@ -9,11 +8,11 @@ const Wrapper = styled.div`
   max-height: 100%;
 `;
 
-const BigBox = styled.div`
-  width: 100%;
-  height: 100px;
-  background: grey;
-`;
+// const BigBox = styled.div`
+//   width: 100%;
+//   height: 100px;
+//   background: grey;
+// `;
 
 const StyledScrollbar = styled(Scrollbars)`
   > .track-vertical {
@@ -35,7 +34,7 @@ const StyledScrollbar = styled(Scrollbars)`
   }
 `;
 
-const MainContent = () => {
+const MainContent: React.FC<{}> = ({ children }) => {
   return (
     <Wrapper>
       <StyledScrollbar
@@ -47,16 +46,7 @@ const MainContent = () => {
           <div {...props} className="thumb-vertical" />
         )}
       >
-        <Row direction="column">
-          <BigBox />
-          <BigBox />
-          <BigBox />
-          <BigBox />
-          <BigBox />
-          <BigBox />
-          <BigBox />
-          <BigBox />
-        </Row>
+        {children}
       </StyledScrollbar>
     </Wrapper>
   );

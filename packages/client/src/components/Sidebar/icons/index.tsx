@@ -3,8 +3,9 @@ import * as React from "react";
 function Home(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      width={24}
-      height={27}
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 27"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -20,8 +21,9 @@ function Home(props: React.SVGProps<SVGSVGElement>) {
 function Game(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      width={24}
-      height={27}
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 27"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -51,8 +53,9 @@ function Game(props: React.SVGProps<SVGSVGElement>) {
 function Share(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      width={24}
-      height={26}
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -68,8 +71,9 @@ function Share(props: React.SVGProps<SVGSVGElement>) {
 function Guide(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      width={24}
-      height={24}
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -85,18 +89,16 @@ function Guide(props: React.SVGProps<SVGSVGElement>) {
 function Login(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      width={25}
-      height={23}
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
+      <path d="M10.799 15.6l6-4.8-6-4.8v3.6H0V12h10.799v3.6z" fill="#000" />
       <path
-        d="M11 15.89L17.11 11 11 6.112V9.78H0v2.444h11v3.667z"
-        fill="#000"
-      />
-      <path
-        d="M13.445 0a10.924 10.924 0 00-7.778 3.223l1.729 1.728a8.5 8.5 0 016.05-2.507 8.5 8.5 0 016.05 2.507 8.501 8.501 0 012.506 6.05 8.501 8.501 0 01-2.507 6.05 8.5 8.5 0 01-6.05 2.507 8.5 8.5 0 01-6.05-2.507l-1.728 1.728a10.924 10.924 0 007.778 3.223c2.94 0 5.702-1.145 7.779-3.223a10.925 10.925 0 003.222-7.778c0-2.94-1.145-5.702-3.223-7.778A10.923 10.923 0 0013.446 0z"
+        d="M13.2 0a10.724 10.724 0 00-7.636 3.164L7.26 4.861A8.346 8.346 0 0113.2 2.4c2.244 0 4.353.875 5.94 2.46a8.346 8.346 0 012.46 5.94 8.346 8.346 0 01-2.46 5.94 8.346 8.346 0 01-5.94 2.46 8.346 8.346 0 01-5.94-2.46l-1.696 1.696A10.725 10.725 0 0013.2 21.6c2.886 0 5.597-1.124 7.636-3.164A10.725 10.725 0 0024 10.8c0-2.886-1.124-5.597-3.164-7.636A10.725 10.725 0 0013.2 0z"
         fill="#000"
       />
     </svg>
@@ -106,8 +108,9 @@ function Login(props: React.SVGProps<SVGSVGElement>) {
 function Settings(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      width={24}
-      height={24}
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
