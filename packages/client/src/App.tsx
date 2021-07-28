@@ -1,8 +1,7 @@
 import React from "react";
 import { ThemeProvider } from "styled-components";
-import firebase from "firebase";
+import firebase from "firebase/app";
 import "firebase/auth";
-import { FirebaseAuthProvider } from "@react-firebase/auth";
 import Picker from "./components/Picker";
 import Sidebar from "./components/Sidebar";
 import { TopBar } from "./components/TopBar";
@@ -10,6 +9,9 @@ import { GlobalStyle } from "./styles";
 import { AppContainer, AppContent } from "./styles/Grid";
 import { hexToRgb } from "./utils/hextorgb";
 import Routes from "./components/Routes";
+import { Provider } from "react-redux";
+import { store } from "./global/createStore";
+import { ReactReduxFirebaseProvider } from "react-redux-firebase";
 
 const firebaseConfig = (() => {
   try {
@@ -18,7 +20,9 @@ const firebaseConfig = (() => {
     return {};
   }
 })();
-console.log(firebaseConfig);
+
+firebase.initializeApp(firebaseConfig);
+
 const colors = {
   light: {
     primary: "#85E6FF",
@@ -31,38 +35,52 @@ const colors = {
   },
   dark: {},
 };
+const rrfConfig = {
+  userProfile: "users",
+  // useFirestoreForProfile: true // Firestore for Profile instead of Realtime DB
+  // enableClaims: true // Get custom claims along with the profile
+};
+const rrfProps = {
+  firebase,
+  config: rrfConfig,
+  dispatch: store.dispatch,
+  // createFirestoreInstance // <- needed if using firestore
+};
+
 function App() {
   return (
-    <FirebaseAuthProvider firebase={firebase} {...firebaseConfig}>
-      <ThemeProvider
-        theme={{
-          colors: colors.light,
-          space: ["0px", "7px", "14px", "24px", "32px", "48px"],
-          fontSize: ["7px", "14px", "24px", "32px", "48px"],
-          borderRadius: 0,
-          shadow: ["0px", "7px", "14px", "24px", "32px", "48px"].map((e) => {
-            return `0 10px ${e} -${parseInt(e) / 2}px rgba(${hexToRgb(
-              colors.light.text,
-              true
-            )}, 0.2)`;
-          }),
-          transition: (...args) =>
-            args.map((arg) => `${arg} 0.2s ease-in-out`).join(","),
-        }}
-      >
-        <Routes.Wrapper>
-          <AppContainer>
-            <GlobalStyle />
-            <TopBar />
-            <AppContent>
-              <Sidebar />
-              <Picker />
-              <Routes.Switch />
-            </AppContent>
-          </AppContainer>
-        </Routes.Wrapper>
-      </ThemeProvider>
-    </FirebaseAuthProvider>
+    <Provider store={store}>
+      <ReactReduxFirebaseProvider {...rrfProps}>
+        <ThemeProvider
+          theme={{
+            colors: colors.light,
+            space: ["0px", "7px", "14px", "24px", "32px", "48px"],
+            fontSize: ["7px", "14px", "24px", "32px", "48px"],
+            borderRadius: 0,
+            shadow: ["0px", "7px", "14px", "24px", "32px", "48px"].map((e) => {
+              return `0 10px ${e} -${parseInt(e) / 2}px rgba(${hexToRgb(
+                colors.light.text,
+                true
+              )}, 0.2)`;
+            }),
+            transition: (...args) =>
+              args.map((arg) => `${arg} 0.2s ease-in-out`).join(","),
+          }}
+        >
+          <Routes.Wrapper>
+            <AppContainer>
+              <GlobalStyle />
+              <TopBar />
+              <AppContent>
+                <Sidebar />
+                <Picker />
+                <Routes.Switch />
+              </AppContent>
+            </AppContainer>
+          </Routes.Wrapper>
+        </ThemeProvider>
+      </ReactReduxFirebaseProvider>
+    </Provider>
   );
 }
 

@@ -1,6 +1,10 @@
 import * as React from "react";
 
-function Home(props: React.SVGProps<SVGSVGElement>) {
+export interface SidebarIconProps extends React.SVGProps<SVGSVGElement> {
+  logout?: boolean;
+}
+
+function Home(props: SidebarIconProps) {
   return (
     <svg
       width="1em"
@@ -18,7 +22,7 @@ function Home(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function Game(props: React.SVGProps<SVGSVGElement>) {
+function Game(props: SidebarIconProps) {
   return (
     <svg
       width="1em"
@@ -50,7 +54,7 @@ function Game(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function Share(props: React.SVGProps<SVGSVGElement>) {
+function Share(props: SidebarIconProps) {
   return (
     <svg
       width="1em"
@@ -68,7 +72,7 @@ function Share(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function Guide(props: React.SVGProps<SVGSVGElement>) {
+function Guide(props: SidebarIconProps) {
   return (
     <svg
       width="1em"
@@ -86,7 +90,7 @@ function Guide(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function Login(props: React.SVGProps<SVGSVGElement>) {
+function Login({ logout, ...props }: SidebarIconProps) {
   return (
     <svg
       width="1em"
@@ -94,6 +98,7 @@ function Login(props: React.SVGProps<SVGSVGElement>) {
       viewBox="0 0 24 22"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
+      style={logout ? { transform: "rotate(180deg)" } : undefined}
       {...props}
     >
       <path d="M10.799 15.6l6-4.8-6-4.8v3.6H0V12h10.799v3.6z" fill="#000" />
@@ -105,7 +110,7 @@ function Login(props: React.SVGProps<SVGSVGElement>) {
   );
 }
 
-function Settings(props: React.SVGProps<SVGSVGElement>) {
+function Settings(props: SidebarIconProps) {
   return (
     <svg
       width="1em"

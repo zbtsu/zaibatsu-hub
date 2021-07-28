@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -25,5 +25,13 @@ export const GlobalStyle = createGlobalStyle`
   iframe {
     width: 0% !important;
     height: 0% !important;
+  }
+  #modal-portal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 0;
+    height: 0;
+    z-index: 1000;
   }
 `;

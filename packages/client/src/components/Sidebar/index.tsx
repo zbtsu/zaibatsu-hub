@@ -1,10 +1,25 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
+import firebase from "firebase";
 import { down } from "styled-breakpoints";
 import { animated, useSpring } from "@react-spring/web";
 import { Column, Row } from "../../styles/Grid";
-import { Home, Game, Share, Guide, Login, Settings } from "./icons";
+import {
+  Home,
+  Game,
+  Share,
+  Guide,
+  Login,
+  Settings,
+  SidebarIconProps,
+} from "./icons";
 import { useHistory } from "react-router-dom";
+import useRippleEffect from "../../utils/hooks/useRippleEffect";
+import { hexToRgb } from "../../utils/hextorgb";
+import { useIsAuth } from "../../utils/hooks/useIsAuth";
+import { useModal } from "../../utils/hooks/useModal";
+import LoginModal from "../Modal/LoginModal";
+import mergeRefs from "../../utils/mergeRefs";
 
 const Wrapper = styled.div`
   border-right: 1px solid ${(props) => props.theme.colors.border};
@@ -20,8 +35,10 @@ const Wrapper = styled.div`
 type IconRoute = {
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => any;
   route?: string;
+  ifAuth?: boolean;
+  logoutOnClick?: boolean;
   title: string;
-  icon: React.FC;
+  icon: React.FC<SidebarIconProps>;
 };
 
 const sideBar: IconRoute[] = [
@@ -50,7 +67,14 @@ const sideBar: IconRoute[] = [
 const bottomBar: IconRoute[] = [
   {
     icon: Login,
-    // route: "/combos",
+    route: "/login",
+    ifAuth: false,
+    title: "Login",
+  },
+  {
+    icon: Login,
+    ifAuth: true,
+    logoutOnClick: true,
     title: "Login",
   },
   {
@@ -106,17 +130,17 @@ const Button = styled.button<ButtonProps>`
   outline: none;
   cursor: pointer;
   display: flex;
-  align-items: center;
-  justify-content: center;
   width: 100%;
   padding-top: 100%;
   position: relative;
-  ${(props) => (props.bottom ? "border-top" : "border-bottom")}: 1px solid ${(
-    props
-  ) => props.theme.colors.border};
+  border-top: ${(props) =>
+    props.bottom ? `1px solid ${props.theme.colors.border}` : "none"};
+  border-bottom: ${(props) =>
+    !props.bottom ? `1px solid ${props.theme.colors.border}` : "none"};
   transition: ${(props) => props.theme.transition("background")};
   &:hover {
-    background: ${(props) => props.theme.colors.border};
+    background: ${(props) =>
+      `rgba(${hexToRgb(props.theme.colors.background, true)},0.025)`};
     & ${ToolTip} {
     }
   }
@@ -124,8 +148,21 @@ const Button = styled.button<ButtonProps>`
 
 interface IIconButton extends IconRoute, ButtonProps {}
 
-const IconButton = ({ icon: Icon, route, title, bottom }: IIconButton) => {
+const IconButton = ({
+  icon: Icon,
+  route,
+  title,
+  bottom,
+  onClick,
+  logoutOnClick,
+  ifAuth,
+}: IIconButton) => {
   const [hovered, setHover] = React.useState(false);
+  const [ref, ripples] = useRippleEffect();
+  const [modalRef, modal] = useModal({
+    content: LoginModal,
+    title: "Login",
+  });
   const spring = useSpring({
     initial: {
       opacity: 0,
@@ -148,25 +185,37 @@ const IconButton = ({ icon: Icon, route, title, bottom }: IIconButton) => {
     },
   });
   const { push } = useHistory();
-  const onClick = useCallback(() => {
+  const onClickFn = useCallback(() => {
+    if (logoutOnClick === true) {
+      console.log("logout");
+      return firebase.auth().signOut();
+    }
     if (route) return push(route);
-  }, [route, push]);
+  }, [route, push, logoutOnClick]);
+
+  if (typeof ifAuth !== "undefined") {
+    return null;
+  }
   return (
     <Button
+      ref={mergeRefs(logoutOnClick === false ? [modalRef, ref] : [ref])}
       bottom={bottom}
       onMouseOver={() => setHover(true)}
       onMouseOut={() => setHover(false)}
-      onClick={onClick}
+      onClick={onClick || onClickFn}
     >
+      {logoutOnClick === false && modal}
+      {ripples}
       <AToolTip style={spring}>{title}</AToolTip>
       <IconHolder>
-        <Icon />
+        <Icon logout={logoutOnClick} />
       </IconHolder>
     </Button>
   );
 };
 
 const Sidebar = () => {
+  const isAuth = useIsAuth();
   return (
     <Wrapper>
       <Row
@@ -187,9 +236,22 @@ const Sidebar = () => {
         <Column>
           <Row height="100%" direction="row" align="flex-end">
             <Column fitContent width="100%">
-              {bottomBar.map((item, index) => (
-                <IconButton bottom key={index} {...item} />
-              ))}
+              {isAuth ? (
+                <IconButton bottom icon={Login} title="Logout" logoutOnClick />
+              ) : (
+                <IconButton
+                  bottom
+                  icon={Login}
+                  title="Login"
+                  logoutOnClick={false}
+                />
+              )}
+              <IconButton
+                bottom
+                icon={Settings}
+                title="Settings"
+                route="/settings"
+              />
             </Column>
           </Row>
         </Column>
