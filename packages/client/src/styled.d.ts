@@ -17,6 +17,7 @@ declare module "styled-components" {
     space: string[];
     borderRadius: number;
     fontSize: string[];
+    letterSpacing: string[];
     transition: (...args: string[]) => string;
   }
 }

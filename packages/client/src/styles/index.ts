@@ -1,4 +1,4 @@
-import styled, { createGlobalStyle } from "styled-components";
+import { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
   @font-face {
@@ -16,6 +16,7 @@ export const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.colors.text};
     padding: 0;
     margin: 0;
+    letter-spacing: -${(props) => props.theme.letterSpacing[1]};
   }
 
   * {

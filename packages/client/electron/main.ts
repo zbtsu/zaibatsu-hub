@@ -43,7 +43,7 @@ function createWindow() {
   const winBounds = store.get("winBounds");
   const options: Electron.BrowserWindowConstructorOptions = Object.assign(
     { ...DEFAULTS },
-    {}
+    winBounds
   );
   let mainWindow: BrowserWindow;
   mainWindow = new BrowserWindow({
@@ -57,7 +57,10 @@ function createWindow() {
   });
 
   mainWindow.on("close", () => {
-    store.set("winBounds", mainWindow.getBounds());
+    store.set("winBounds", {
+      bounds: mainWindow.getBounds(),
+      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
+    });
     mainWindow = null;
   });
 
@@ -82,16 +85,9 @@ app.on("activate", () => {
 });
 
 if (process.env.NODE_ENV === "development") {
-  app
-    .whenReady()
-    .then(() => {
-      installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
-        .then((name) => console.log(`Added Extension:  ${name}`))
-        .catch((err) => console.log("An error occurred: ", err));
-    })
-    .then((e) => {
-      if (e) {
-        console.log(e);
-      }
-    });
+  app.whenReady().then(() => {
+    installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
+      .then((name) => console.log(`Added Extension:  ${name}`))
+      .catch((err) => console.log("An error occurred: ", err));
+  });
 }

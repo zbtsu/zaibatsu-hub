@@ -17,12 +17,12 @@ const zoomIn = keyframes`
 const RippleSpan = styled.span<{ top: number; left: number }>`
   border-radius: 100%;
   width: 100%;
-  height: 100%;
+  padding-top: 100%;
   position: absolute;
   top: ${(props) => props.top}px;
   /* top: 0; */
   background: ${(props) =>
-    `rgba(${hexToRgb(props.theme.colors.background, true)}, 0.05)`};
+    `rgba(${hexToRgb(props.theme.colors.text, true)}, 0.1)`};
   left: ${(props) => props.left}px;
   /* left: 0; */
   animation: ${zoomIn} 0.5s ease-out;
@@ -63,10 +63,13 @@ const useRippleEffect = (): [
     const currentRef = ref.current;
     const currentRipple = addRipple.current;
     if (currentRef) {
+      currentRef.style.position = "relative";
       currentRef.addEventListener("click", currentRipple);
     }
     return () => {
       if (currentRef) {
+        currentRef.style.position = "";
+
         currentRef.removeEventListener("click", currentRipple);
       }
     };

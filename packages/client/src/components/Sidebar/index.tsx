@@ -18,8 +18,8 @@ import useRippleEffect from "../../utils/hooks/useRippleEffect";
 import { hexToRgb } from "../../utils/hextorgb";
 import { useIsAuth } from "../../utils/hooks/useIsAuth";
 import { useModal } from "../../utils/hooks/useModal";
-import LoginModal from "../Modal/LoginModal";
 import mergeRefs from "../../utils/mergeRefs";
+import AuthModal from "../Modal/AuthModal";
 
 const Wrapper = styled.div`
   border-right: 1px solid ${(props) => props.theme.colors.border};
@@ -61,26 +61,6 @@ const sideBar: IconRoute[] = [
     icon: Guide,
     route: "/guides",
     title: "Guides",
-  },
-];
-
-const bottomBar: IconRoute[] = [
-  {
-    icon: Login,
-    route: "/login",
-    ifAuth: false,
-    title: "Login",
-  },
-  {
-    icon: Login,
-    ifAuth: true,
-    logoutOnClick: true,
-    title: "Login",
-  },
-  {
-    icon: Settings,
-    route: "/settings",
-    title: "Settings",
   },
 ];
 
@@ -159,10 +139,7 @@ const IconButton = ({
 }: IIconButton) => {
   const [hovered, setHover] = React.useState(false);
   const [ref, ripples] = useRippleEffect();
-  const [modalRef, modal] = useModal({
-    content: LoginModal,
-    title: "Login",
-  });
+  const [modalRef, modal] = useModal(AuthModal);
   const spring = useSpring({
     initial: {
       opacity: 0,

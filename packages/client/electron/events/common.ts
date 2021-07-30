@@ -1,6 +1,6 @@
 import { BrowserWindow, dialog, ipcMain, screen, app } from "electron";
 import * as fs from "fs";
-import { buildURL } from "../main";
+import { buildURL } from "../utils";
 
 function percentage(num: number, per: number) {
   return (num / 100) * per;

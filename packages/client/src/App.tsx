@@ -10,8 +10,10 @@ import { AppContainer, AppContent } from "./styles/Grid";
 import { hexToRgb } from "./utils/hextorgb";
 import Routes from "./components/Routes";
 import { Provider } from "react-redux";
-import { store } from "./global/createStore";
+import { persistor, store } from "./global/createStore";
 import { ReactReduxFirebaseProvider } from "react-redux-firebase";
+import { PersistGate } from "redux-persist/integration/react";
+import AuthActions from "./components/AuthActions";
 
 const firebaseConfig = (() => {
   try {
@@ -25,12 +27,12 @@ firebase.initializeApp(firebaseConfig);
 
 const colors = {
   light: {
-    primary: "#85E6FF",
+    primary: "#213645",
     secondary: "213443",
     error: "#C81D3C",
     success: "#1DC880",
-    text: "#000",
-    background: "#fff",
+    text: "#000000",
+    background: "#FFFFFF",
     border: "#ececec",
   },
   dark: {},
@@ -50,36 +52,42 @@ const rrfProps = {
 function App() {
   return (
     <Provider store={store}>
-      <ReactReduxFirebaseProvider {...rrfProps}>
-        <ThemeProvider
-          theme={{
-            colors: colors.light,
-            space: ["0px", "7px", "14px", "24px", "32px", "48px"],
-            fontSize: ["7px", "14px", "24px", "32px", "48px"],
-            borderRadius: 0,
-            shadow: ["0px", "7px", "14px", "24px", "32px", "48px"].map((e) => {
-              return `0 10px ${e} -${parseInt(e) / 2}px rgba(${hexToRgb(
-                colors.light.text,
-                true
-              )}, 0.2)`;
-            }),
-            transition: (...args) =>
-              args.map((arg) => `${arg} 0.2s ease-in-out`).join(","),
-          }}
-        >
-          <Routes.Wrapper>
-            <AppContainer>
-              <GlobalStyle />
-              <TopBar />
-              <AppContent>
-                <Sidebar />
-                <Picker />
-                <Routes.Switch />
-              </AppContent>
-            </AppContainer>
-          </Routes.Wrapper>
-        </ThemeProvider>
-      </ReactReduxFirebaseProvider>
+      <PersistGate persistor={persistor}>
+        <ReactReduxFirebaseProvider {...rrfProps}>
+          <ThemeProvider
+            theme={{
+              colors: colors.light,
+              space: ["0px", "7px", "14px", "24px", "32px", "48px"],
+              fontSize: ["7px", "14px", "24px", "32px", "48px"],
+              borderRadius: 0,
+              shadow: ["0px", "7px", "14px", "24px", "32px", "48px"].map(
+                (e) => {
+                  return `0 10px ${e} -${parseInt(e) / 2}px rgba(${hexToRgb(
+                    colors.light.text,
+                    true
+                  )}, 0.2)`;
+                }
+              ),
+              letterSpacing: ["0.0", "0.03em", "0.04em", "0.06em"],
+              transition: (...args) =>
+                args.map((arg) => `${arg} 0.2s ease-in-out`).join(","),
+            }}
+          >
+            <Routes.Wrapper>
+              <AppContainer>
+                <GlobalStyle />
+                <TopBar />
+                <AppContent>
+                  <AuthActions />
+                  <Sidebar />
+                  <Picker />
+                  <Routes.Switch />
+                </AppContent>
+              </AppContainer>
+            </Routes.Wrapper>
+          </ThemeProvider>
+        </ReactReduxFirebaseProvider>
+      </PersistGate>
     </Provider>
   );
 }

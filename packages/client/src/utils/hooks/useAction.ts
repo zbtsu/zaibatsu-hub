@@ -1,10 +1,11 @@
-import { useDispatch } from "react-redux";
+import { AnyAction } from "redux";
+import { useAppDispatch } from "../../global/hooks";
 
-const useAction = <T extends (input: Parameters<T>[0]) => void>(
-  action: T
-): ((input: Parameters<T>[0]) => void) => {
-  const dispatch = useDispatch();
-  return (input: Parameters<T>[0]) => dispatch(action(input));
+const useAction = <T extends (...args: any[]) => AnyAction>(action: T) => {
+  const dispatch = useAppDispatch();
+  return (...args: Parameters<T>) => {
+    return dispatch(action(...args));
+  };
 };
 
 export default useAction;
