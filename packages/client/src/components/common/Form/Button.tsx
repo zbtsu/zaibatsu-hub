@@ -1,21 +1,27 @@
 import React from "react";
 import styled, { DefaultTheme } from "styled-components";
-import useRippleEffect from "../../utils/hooks/useRippleEffect";
+import useRippleEffect from "../../../utils/hooks/useRippleEffect";
 import tinyColor from "tinycolor2";
 
 interface ButtonWrapperProps {
   color?: keyof DefaultTheme["colors"];
   width?: string;
+  smallPadding?: boolean;
 }
 
 interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
   color?: keyof DefaultTheme["colors"];
   width?: string;
+  smallPadding?: boolean;
 }
 
 export const ButtonWrapper = styled.button<ButtonWrapperProps>`
   background: ${(props) => props.theme.colors[props.color || "background"]};
-  padding: ${(props) => props.theme.space[2]} ${(props) => props.theme.space[3]};
+
+  padding: ${(props) =>
+    `${props.theme.space[props.smallPadding ? 1 : 2]} ${
+      props.theme.space[props.smallPadding ? 2 : 3]
+    }`};
   color: ${(props) =>
     `${tinyColor.mostReadable(props.theme.colors[props.color || "background"], [
       "#FFF",

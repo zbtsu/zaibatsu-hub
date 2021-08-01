@@ -1,10 +1,11 @@
 import React from "react";
-import { Column, Paragraph, Row } from "../../styles/Grid";
-import { ModalReturn } from "../../utils/hooks/useModal";
+import { useAuth } from "reactfire";
+import { Column, Paragraph, Row } from "../../../styles/Grid";
+import { ModalReturn } from "../../../utils/hooks/useModal";
 import { Button } from "../Form/Button";
-import firebase from "firebase/app";
 
 const AuthActionsModalContent = () => {
+  const auth = useAuth();
   return (
     <Row>
       <Column size="12">
@@ -16,7 +17,7 @@ const AuthActionsModalContent = () => {
       <Column size="6">
         <Button
           onClick={() => {
-            firebase.auth().signOut();
+            auth.signOut();
           }}
           width="100%"
         >
@@ -26,7 +27,7 @@ const AuthActionsModalContent = () => {
       <Column size="6">
         <Button
           onClick={() => {
-            firebase.auth().currentUser?.sendEmailVerification();
+            auth.currentUser?.sendEmailVerification();
           }}
           width="100%"
         >

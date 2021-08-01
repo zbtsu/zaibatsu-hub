@@ -1,10 +1,9 @@
 import React, { useCallback, useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
-import firebase from "firebase/app";
 import TextInput from "../Form/TextInput";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { ErrorMessage, FormControlWrapper } from "../Form/styles";
+import { FormControlWrapper } from "../Form/styles";
 import {
   Center,
   Column,
@@ -12,15 +11,19 @@ import {
   Margin,
   Paragraph,
   Row,
-} from "../../styles/Grid";
-import { StyledFirebaseAuth } from "react-firebaseui";
+} from "../../../styles/Grid";
+// import { StyledFirebaseAuth } from "react-firebaseui";
 import { Button } from "../Form/Button";
-import { ModalReturn } from "../../utils/hooks/useModal";
+import { ModalReturn } from "../../../utils/hooks/useModal";
 import { useMemo } from "react";
 import { useEffect } from "react";
-import { useIsAuth } from "../../utils/hooks/useIsAuth";
-import { useFirebasePromise } from "../../utils/hooks/useFirebasePromise";
-import FormError from "../Form/FormError";
+import { useFirebasePromise } from "../../../utils/hooks/useFirebasePromise";
+import FormMessage from "../Form/FormMessages";
+import { closeModal } from "../../../global/slices/modalSlice";
+import useAction from "../../../utils/hooks/useAction";
+import { useAuth, useUser } from "reactfire";
+import firebase from "firebase/app";
+import { SiFacebook, SiGoogle, SiTwitter } from "react-icons/si";
 
 type ModalState = "login" | "register" | "forgotPassword";
 
@@ -46,6 +49,7 @@ const ForgotPasswordSchema = yup.object().shape({
 });
 
 const SocialAuth = () => {
+  const auth = useAuth();
   return (
     <Row>
       <Column size="12">
@@ -53,14 +57,41 @@ const SocialAuth = () => {
           <Paragraph>Or you can use your social account to login.</Paragraph>
         </Center>
       </Column>
-      <Column size="12">
-        <StyledFirebaseAuth
-          uiConfig={{
-            signInFlow: "popup",
-            signInOptions: [firebase.auth.GoogleAuthProvider.PROVIDER_ID],
+      <Column size="4">
+        <Button
+          smallPadding
+          width="100%"
+          onClick={() => {
+            const provider = new firebase.auth.FacebookAuthProvider();
+            auth.signInWithPopup(provider);
           }}
-          firebaseAuth={firebase.auth()}
-        />
+        >
+          <SiFacebook size="24" />
+        </Button>
+      </Column>
+      <Column size="4">
+        <Button
+          smallPadding
+          width="100%"
+          onClick={() => {
+            const provider = new firebase.auth.GoogleAuthProvider();
+            auth.signInWithPopup(provider);
+          }}
+        >
+          <SiGoogle size="24" />
+        </Button>
+      </Column>
+      <Column size="4">
+        <Button
+          smallPadding
+          width="100%"
+          onClick={() => {
+            const provider = new firebase.auth.TwitterAuthProvider();
+            auth.signInWithPopup(provider);
+          }}
+        >
+          <SiTwitter size="24" />
+        </Button>
       </Column>
     </Row>
   );
@@ -75,13 +106,17 @@ const LoginForm = ({ setFormState }: FormProps) => {
     reValidateMode: "onChange",
     resolver: yupResolver(LoginSchema),
   });
+  const auth = useAuth();
 
   const [loginState, loginWrapper] = useFirebasePromise();
-  const onSubmit = useCallback(async (data) => {
-    loginWrapper(() =>
-      firebase.auth().signInWithEmailAndPassword(data.email, data.password)
-    );
-  }, []);
+  const onSubmit = useCallback(
+    async (data) => {
+      loginWrapper(() =>
+        auth.signInWithEmailAndPassword(data.email, data.password)
+      );
+    },
+    [loginWrapper, auth]
+  );
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -100,7 +135,7 @@ const LoginForm = ({ setFormState }: FormProps) => {
           errors={errors}
           name="password"
         />
-        <FormError error={loginState.error} />
+        <FormMessage.Error message={loginState.error} />
         <FormControlWrapper>
           <Row>
             <Column size="12">
@@ -151,19 +186,23 @@ const RegisterForm = ({ setFormState }: FormProps) => {
     reValidateMode: "onChange",
     resolver: yupResolver(RegisterSchema),
   });
+  const auth = useAuth();
   const [registerState, registerWrapper] = useFirebasePromise();
-  const onSubmit = useCallback(async (data) => {
-    try {
-      await registerWrapper(() =>
-        firebase
-          .auth()
-          .createUserWithEmailAndPassword(data.email, data.password)
-      );
-      return firebase.auth().currentUser?.sendEmailVerification();
-    } catch (e) {
-      console.log(e);
-    }
-  }, []);
+  const closeModalFn = useAction(closeModal);
+  const onSubmit = useCallback(
+    async (data) => {
+      try {
+        await registerWrapper(() =>
+          auth.createUserWithEmailAndPassword(data.email, data.password)
+        );
+        closeModalFn();
+        return auth.currentUser?.sendEmailVerification();
+      } catch (e) {
+        console.log(e);
+      }
+    },
+    [closeModalFn, registerWrapper, auth]
+  );
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -191,8 +230,12 @@ const RegisterForm = ({ setFormState }: FormProps) => {
           name="passwordConfirmation"
         />
 
-        <FormError error={registerState.error} />
-
+        <FormMessage.Error message={registerState.error} />
+        <FormMessage.Success
+          message={
+            registerState.result && "Check your email for a verification link!"
+          }
+        />
         <FormControlWrapper>
           <Row>
             <Column size="12">
@@ -243,10 +286,15 @@ const ForgotPasswordForm = ({ setFormState }: FormProps) => {
     reValidateMode: "onChange",
     resolver: yupResolver(ForgotPasswordSchema),
   });
-  const onSubmit = useCallback(async (data) => {
-    const result = await firebase.auth().sendPasswordResetEmail(data.email);
-    console.log(result);
-  }, []);
+  const [resetState, resetWrapper] = useFirebasePromise();
+  const auth = useAuth();
+
+  const onSubmit = useCallback(
+    async (data) => {
+      resetWrapper(() => auth.sendPasswordResetEmail(data.email));
+    },
+    [resetWrapper, auth]
+  );
   return (
     <div>
       <form onSubmit={handleSubmit(onSubmit)}>
@@ -257,11 +305,17 @@ const ForgotPasswordForm = ({ setFormState }: FormProps) => {
           errors={errors}
           name="email"
         />
+        <FormMessage.Error message={resetState.error} />
+        <FormMessage.Success
+          message={
+            resetState.result && "Check your email and follow the instructions"
+          }
+        />
         <FormControlWrapper>
           <Row>
             <Column size="12">
               <Button color="primary" width="100%">
-                Register
+                Send me the link!
               </Button>
             </Column>
           </Row>
@@ -334,11 +388,11 @@ const AuthModal = (): ModalReturn => {
         return LoginForm;
     }
   }, [state]);
-  const isAuthenticated = useIsAuth();
+  const user = useUser();
   return {
     title,
     subtitle,
-    content: !isAuthenticated && (
+    content: !user?.data?.uid && (
       <>
         <Content setFormState={setState} />
       </>

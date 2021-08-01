@@ -1,9 +1,8 @@
 import React, { useCallback } from "react";
 import styled from "styled-components";
-import firebase from "firebase";
 import { down } from "styled-breakpoints";
 import { animated, useSpring } from "@react-spring/web";
-import { Column, Row } from "../../styles/Grid";
+import { Center, Column, Row } from "../../styles/Grid";
 import {
   Home,
   Game,
@@ -16,10 +15,12 @@ import {
 import { useHistory } from "react-router-dom";
 import useRippleEffect from "../../utils/hooks/useRippleEffect";
 import { hexToRgb } from "../../utils/hextorgb";
-import { useIsAuth } from "../../utils/hooks/useIsAuth";
 import { useModal } from "../../utils/hooks/useModal";
 import mergeRefs from "../../utils/mergeRefs";
-import AuthModal from "../Modal/AuthModal";
+import AuthModal from "../common/Modal/AuthModal";
+import { useAuth, useUser } from "reactfire";
+import RelativeSuspense from "../common/RelativeSuspense";
+import { Avatar } from "../../styles/Common";
 
 const Wrapper = styled.div`
   border-right: 1px solid ${(props) => props.theme.colors.border};
@@ -38,7 +39,7 @@ type IconRoute = {
   ifAuth?: boolean;
   logoutOnClick?: boolean;
   title: string;
-  icon: React.FC<SidebarIconProps>;
+  icon: React.FC<SidebarIconProps> | any;
 };
 
 const sideBar: IconRoute[] = [
@@ -128,112 +129,125 @@ const Button = styled.button<ButtonProps>`
 
 interface IIconButton extends IconRoute, ButtonProps {}
 
-const IconButton = ({
-  icon: Icon,
-  route,
-  title,
-  bottom,
-  onClick,
-  logoutOnClick,
-  ifAuth,
-}: IIconButton) => {
-  const [hovered, setHover] = React.useState(false);
-  const [ref, ripples] = useRippleEffect();
-  const [modalRef, modal] = useModal(AuthModal);
-  const spring = useSpring({
-    initial: {
-      opacity: 0,
-      transform: "translate(50%, -50%)",
-      display: "none",
-    },
-    to: async (next: any) => {
-      if (hovered) {
-        return await next({
-          display: "block",
-          opacity: 1,
-          transform: "translate(0%, -50%)",
-        });
-      }
-      await next({
+const IconButton = React.forwardRef(
+  (
+    { icon: Icon, route, title, bottom, onClick, logoutOnClick }: IIconButton,
+    forwardedRef
+  ) => {
+    const [hovered, setHover] = React.useState(false);
+    const [ref, ripples] = useRippleEffect();
+    const spring = useSpring({
+      initial: {
         opacity: 0,
         transform: "translate(50%, -50%)",
-      });
-      return next({ display: "none" });
-    },
-  });
-  const { push } = useHistory();
-  const onClickFn = useCallback(() => {
-    if (logoutOnClick === true) {
-      console.log("logout");
-      return firebase.auth().signOut();
-    }
-    if (route) return push(route);
-  }, [route, push, logoutOnClick]);
-
-  if (typeof ifAuth !== "undefined") {
-    return null;
+        display: "none",
+      },
+      to: async (next: any) => {
+        if (hovered) {
+          return await next({
+            display: "block",
+            opacity: 1,
+            transform: "translate(0%, -50%)",
+          });
+        }
+        await next({
+          opacity: 0,
+          transform: "translate(50%, -50%)",
+        });
+        return next({ display: "none" });
+      },
+    });
+    const { push } = useHistory();
+    const onClickFn = useCallback(
+      (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (onClick) {
+          return onClick(e);
+        }
+        if (route) return push(route);
+      },
+      [route, push, logoutOnClick, onClick]
+    );
+    return (
+      <Button
+        ref={mergeRefs([ref, forwardedRef])}
+        bottom={bottom}
+        onMouseOver={() => setHover(true)}
+        onMouseOut={() => setHover(false)}
+        onClick={onClickFn}
+      >
+        {ripples}
+        <AToolTip style={spring}>{title}</AToolTip>
+        <IconHolder>
+          <Icon />
+        </IconHolder>
+      </Button>
+    );
   }
-  return (
-    <Button
-      ref={mergeRefs(logoutOnClick === false ? [modalRef, ref] : [ref])}
-      bottom={bottom}
-      onMouseOver={() => setHover(true)}
-      onMouseOut={() => setHover(false)}
-      onClick={onClick || onClickFn}
-    >
-      {logoutOnClick === false && modal}
-      {ripples}
-      <AToolTip style={spring}>{title}</AToolTip>
-      <IconHolder>
-        <Icon logout={logoutOnClick} />
-      </IconHolder>
-    </Button>
-  );
-};
+);
 
 const Sidebar = () => {
-  const isAuth = useIsAuth();
+  const user = useUser();
+  const auth = useAuth();
+  const [modalRef, modal] = useModal(AuthModal);
+  console.log(user);
   return (
-    <Wrapper>
-      <Row
-        height="100%"
-        direction="row"
-        align="stretch"
-        justify="space-between"
-      >
-        <Column>
-          <Row direction="row">
-            <Column fitContent width="100%">
-              {sideBar.map((item, index) => (
-                <IconButton key={index} {...item} />
-              ))}
-            </Column>
-          </Row>
-        </Column>
-        <Column>
-          <Row height="100%" direction="row" align="flex-end">
-            <Column fitContent width="100%">
-              {isAuth ? (
-                <IconButton bottom icon={Login} title="Logout" logoutOnClick />
-              ) : (
+    <RelativeSuspense>
+      <Wrapper>
+        <Row
+          height="100%"
+          direction="row"
+          align="stretch"
+          justify="space-between"
+        >
+          <Column>
+            <Row direction="row">
+              <Column fitContent width="100%">
+                {sideBar.map((item, index) => (
+                  <IconButton key={index} {...item} />
+                ))}
+              </Column>
+            </Row>
+          </Column>
+          <Column>
+            <Row height="100%" direction="row" align="flex-end">
+              <Column fitContent width="100%">
+                {!user.data && (
+                  <>
+                    <IconButton
+                      ref={modalRef}
+                      bottom
+                      icon={Login}
+                      title="Login"
+                    />
+                    {modal}
+                  </>
+                )}
+                {user.data && (
+                  <IconButton
+                    bottom
+                    icon={() =>
+                      user?.data?.photoURL && (
+                        <Center>
+                          <Avatar src={user.data.photoURL} />
+                        </Center>
+                      )
+                    }
+                    title="Logout"
+                    onClick={() => auth.signOut()}
+                  />
+                )}
                 <IconButton
                   bottom
-                  icon={Login}
-                  title="Login"
-                  logoutOnClick={false}
+                  icon={Settings}
+                  title="Settings"
+                  route="/settings"
                 />
-              )}
-              <IconButton
-                bottom
-                icon={Settings}
-                title="Settings"
-                route="/settings"
-              />
-            </Column>
-          </Row>
-        </Column>
-      </Row>
-    </Wrapper>
+              </Column>
+            </Row>
+          </Column>
+        </Row>
+      </Wrapper>
+    </RelativeSuspense>
   );
 };
 

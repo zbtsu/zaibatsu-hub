@@ -1,8 +1,4 @@
 import { app, BrowserWindow, dialog, screen } from "electron";
-import installExtension, {
-  REDUX_DEVTOOLS,
-  REACT_DEVELOPER_TOOLS,
-} from "electron-devtools-installer";
 import * as events from "./events";
 import * as Store from "electron-store";
 import { buildURL } from "./utils";
@@ -58,14 +54,14 @@ function createWindow() {
 
   mainWindow.on("close", () => {
     store.set("winBounds", {
-      bounds: mainWindow.getBounds(),
+      bounds: mainWindow?.getBounds(),
       maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
     });
     mainWindow = null;
   });
 
   events.common(mainWindow, __dirname);
-  events.updates(mainWindow, __dirname);
+  // events.updates(mainWindow, __dirname);
 }
 
 app.on("ready", createWindow);
@@ -85,9 +81,12 @@ app.on("activate", () => {
 });
 
 if (process.env.NODE_ENV === "development") {
+  const devtools = require("electron-devtools-installer");
+  const installExtension = devtools.default;
+  const { REDUX_DEVTOOLS, REACT_DEVELOPER_TOOLS } = devtools;
   app.whenReady().then(() => {
     installExtension([REACT_DEVELOPER_TOOLS, REDUX_DEVTOOLS])
-      .then((name) => console.log(`Added Extension:  ${name}`))
-      .catch((err) => console.log("An error occurred: ", err));
+      .then((name: any) => console.log(`Added Extension:  ${name}`))
+      .catch((err: any) => console.log("An error occurred: ", err));
   });
 }

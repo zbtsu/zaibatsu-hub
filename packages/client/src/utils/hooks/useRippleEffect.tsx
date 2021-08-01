@@ -39,13 +39,13 @@ const RippleHolder = styled.div`
 `;
 
 const useRippleEffect = (): [
-  React.MutableRefObject<HTMLButtonElement | null>,
+  React.MutableRefObject<any>,
   React.ReactElement
 ] => {
   const [ripples, setRipples] = React.useState<
     { top: number; left: number; id: string }[]
   >([]);
-  const ref = useRef<HTMLButtonElement | null>(null);
+  const ref = useRef<any>(null);
   const addRipple = useRef((event: MouseEvent) => {
     const currentTargetRect = (
       event.currentTarget as HTMLButtonElement

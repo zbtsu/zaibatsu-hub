@@ -1,7 +1,7 @@
 import React from "react";
 import { DeepMap, UseFormRegister } from "react-hook-form";
 import styled from "styled-components";
-import { hexToRgb } from "../../utils/hextorgb";
+import { hexToRgb } from "../../../utils/hextorgb";
 import { ErrorPopup, FormControlWrapper, StyledLabel } from "./styles";
 
 interface Props {

@@ -1,9 +1,4 @@
 import { combineReducers, configureStore } from "@reduxjs/toolkit";
-import {
-  getFirebase,
-  actionTypes as rrfActionTypes,
-  firebaseReducer,
-} from "react-redux-firebase";
 import { mainReducer } from "./slices/mainSlice";
 import { modalReducer } from "./slices/modalSlice";
 import {
@@ -17,7 +12,6 @@ import {
   REGISTER,
 } from "redux-persist";
 import electronStorage from "./helpers/electronStorage";
-import { PersistConfig } from "redux-persist/es/types";
 // import { constants } from "redux-firestore";
 
 const IGNORED_PERSISTED_ACTIONS = [
@@ -28,16 +22,8 @@ const IGNORED_PERSISTED_ACTIONS = [
   PURGE,
   REGISTER,
 ];
-
-const IGNORED_FIREBASE_ACTIONS = Object.keys(rrfActionTypes).map(
-  (type) => `@@reactReduxFirebase/${type}`
-);
-
-type FirebaseReducerType = ReturnType<typeof firebaseReducer>;
-
 const rootReducer = combineReducers({
   main: mainReducer,
-  firebase: firebaseReducer,
   modal: modalReducer,
 });
 
@@ -47,7 +33,6 @@ const persistedReducer = persistReducer(
     version: 1,
     storage: electronStorage,
     migrate: (oldState: any) => {
-      oldState.firebase = {};
       return Promise.resolve(oldState);
     },
   },
@@ -61,21 +46,11 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
       serializableCheck: {
-        ignoredActions: [
-          // just ignore every redux-firebase and react-redux-firebase action type
-          // ...Object.keys(rfConstants.actionTypes).map(
-          //   (type) => `${rfConstants.actionsPrefix}/${type}`
-          // ),
-          ...IGNORED_FIREBASE_ACTIONS,
-
-          ...IGNORED_PERSISTED_ACTIONS,
-        ],
+        ignoredActions: [...IGNORED_PERSISTED_ACTIONS],
         ignoredPaths: ["firebase"],
       },
       thunk: {
-        extraArgument: {
-          getFirebase,
-        },
+        extraArgument: {},
       },
     }),
 });
@@ -83,7 +58,6 @@ console.log({ store });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export interface RootState {
-  firebase: FirebaseReducerType;
   modal: ReturnType<typeof modalReducer>;
   main: ReturnType<typeof mainReducer>;
 }

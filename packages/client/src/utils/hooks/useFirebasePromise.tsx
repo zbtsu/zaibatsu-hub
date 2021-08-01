@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "firebase";
 
 type InitialState<T extends any> = {
   error?: string;
@@ -17,24 +16,24 @@ type OptionsType = {
   initialState: InitialState<any>;
 };
 
-type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
-type FirebaseType<T extends string, A extends string> = {
-  path: T;
-  functionPath: A;
-};
+// type ThenArg<T> = T extends PromiseLike<infer U> ? U : T;
 
 export const useFirebasePromise = (
   options: OptionsType = { initialState }
 ): [InitialState<any>, (callBack: () => Promise<any>) => Promise<void>] => {
   const [state, setState] = useState(options.initialState);
   const wrapFirebaseAction = async (callBack: () => Promise<any>) => {
+    let result: ReturnType<typeof callBack> | null = null;
     try {
-      const result = (await callBack()) as ThenArg<typeof callBack>;
-      setState((state) => ({ ...state, result }));
+      result = (await callBack()) as ReturnType<typeof callBack>;
+      setState((state) => ({ ...state, result: result || true }));
     } catch (e) {
       setState((state) => ({ ...state, error: e.message }));
     } finally {
       setState((state) => ({ ...state, loading: false }));
+    }
+    if (result) {
+      return result;
     }
   };
   console.log({ state });

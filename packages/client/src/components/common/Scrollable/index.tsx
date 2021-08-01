@@ -1,7 +1,7 @@
 import React from "react";
 import Scrollbars, { ScrollbarProps } from "react-custom-scrollbars";
 import styled from "styled-components";
-import { hexToRgb } from "../../utils/hextorgb";
+import { hexToRgb } from "../../../utils/hextorgb";
 
 const StyledScrollbar = styled(Scrollbars)`
   > .track-vertical {

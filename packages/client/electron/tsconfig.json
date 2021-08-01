@@ -4,7 +4,8 @@
     "noImplicitAny": true,
     "sourceMap": true,
     "outDir": "../build/electron",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "target": "ESNext"
   },
   "include": [".", "../src/types"],
   "exclude": ["node_modules"]

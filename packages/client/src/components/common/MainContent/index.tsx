@@ -1,7 +1,5 @@
 import React from "react";
 import styled from "styled-components";
-import { Scrollbars } from "react-custom-scrollbars";
-import { hexToRgb } from "../../utils/hextorgb";
 import Scrollable from "../Scrollable";
 
 const Wrapper = styled.div`

@@ -46,23 +46,23 @@ const makeNewWindow = (
 };
 
 function common(mainWindow: BrowserWindow, __dirname: string) {
-  ipcMain.handle("minimize", (event) => {
+  ipcMain.on("minimize", (event) => {
     const window = BrowserWindow.fromId(event.frameId);
     window.minimize();
   });
-  ipcMain.handle("maximize", (event) => {
+  ipcMain.on("maximize", (event) => {
     const window = BrowserWindow.fromId(event.frameId);
     if (window.isMaximized()) {
       return window.restore();
     }
     return window.maximize();
   });
-  ipcMain.handle("close", (event) => {
+  ipcMain.on("close", (event) => {
     const window = BrowserWindow.fromWebContents(event.sender);
     window.close();
     // mainWindow.close();
   });
-  ipcMain.handle("save-combo", (event, data, title = "Combo.zaic") => {
+  ipcMain.on("save-combo", (event, data, title = "Combo.zaic") => {
     const options: Electron.SaveDialogOptions = {
       title: "Save Combo",
       buttonLabel: "Save",
@@ -74,7 +74,7 @@ function common(mainWindow: BrowserWindow, __dirname: string) {
     });
     event.sender.send("notification", "Combo Exported!");
   });
-  ipcMain.handle("open-combo", (event, arg: string) => {
+  ipcMain.on("open-combo", (event, arg: string) => {
     const primaryDisplay = screen.getPrimaryDisplay();
     const DIMENSIONS: NWOpen = {
       width: percentage(primaryDisplay.bounds.width, 90),

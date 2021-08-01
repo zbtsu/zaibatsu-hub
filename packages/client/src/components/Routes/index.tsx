@@ -1,6 +1,7 @@
 import React from "react";
 import { Route, Switch, HashRouter as Router } from "react-router-dom";
-import MainContent from "../MainContent";
+import MainContent from "../common/MainContent";
+import Settings from "./pages/Settings";
 
 // interface Props {}
 
@@ -23,7 +24,7 @@ const Routes = {
             <div>Guides</div>
           </Route>
           <Route path="/settings" exact>
-            <div>Settings</div>
+            <Settings />
           </Route>
         </Switch>
       </MainContent>

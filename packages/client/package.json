@@ -4,6 +4,7 @@
   "private": true,
   "main": "./build/electron/main.js",
   "homepage": ".",
+  "repository": "https://github.com/zbtsu/zaibatsu-hub/",
   "dependencies": {
     "@hookform/resolvers": "^2.6.1",
     "@react-firebase/firestore": "^0.5.5",
@@ -16,17 +17,18 @@
     "electron-log": "^4.4.0",
     "electron-store": "^8.0.0",
     "electron-updater": "^4.3.9",
-    "firebase": "^8.8.0",
+    "firebase": "^8.8.1",
     "react": "^17",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^17",
     "react-firebaseui": "^5.0.2",
     "react-hook-form": "^7.12.1",
+    "react-icons": "^4.2.0",
     "react-redux": "^7.2.4",
-    "react-redux-firebase": "^3.10.0",
     "react-router-dom": "^5.2.0",
+    "react-spinners": "^0.11.0",
+    "reactfire": "^3.0.0-rc.3",
     "redux": "^4.1.0",
-    "redux-firestore": "^0.15.0",
     "redux-persist": "^6.0.0",
     "rooks": "^5.4.2",
     "styled-breakpoints": "^10.0.1",
@@ -43,8 +45,8 @@
     "start:electron": "env-cmd -f ./development.env ts-node --skip-project electron/connect-electron.ts",
     "watch:electron": "env-cmd -f ./development.env tsc --watch --project electron/tsconfig.json",
     "start:react": "env-cmd -f ./development.env craco start",
-    "dist": "yarn pre:dist && electron-builder build -mwl -c.extraMetadata.main=build/electron/main.js --publish \"onTag\"",
-    "pre:dist": "env-cmd -f ./production.env npm run build && npm run build:electron"
+    "dist": "yarn pre:dist && electron-builder build -c.extraMetadata.main=./build/electron/main.js",
+    "pre:dist": "env-cmd -f ./production.env yarn build && yarn build:electron"
   },
   "eslintConfig": {
     "extends": [
@@ -65,8 +67,8 @@
     ]
   },
   "build": {
-    "productName": "Zaibatsu Bud",
-    "appId": "com.alekangelov.ZaibatsuBud",
+    "productName": "Zaibatsu Hub",
+    "appId": "com.alekangelov.ZaibatsuHub",
     "publish": "github",
     "dmg": {
       "contents": [
@@ -99,7 +101,7 @@
       "license": "LICENSE"
     },
     "directories": {
-      "buildResources": "public"
+      "buildResources": "build"
     },
     "fileAssociations": [
       {
@@ -126,8 +128,8 @@
     "craco-esbuild": "^0.3.3",
     "cross-env": "^7.0.3",
     "csp-html-webpack-plugin": "^5.1.0",
-    "electron": "^13.1.7",
-    "electron-builder": "^22.11.7",
+    "electron": "13.1.7",
+    "electron-builder": "22.11.7",
     "electron-devtools-installer": "^3.2.0",
     "env-cmd": "^10.1.0",
     "foreman": "^3.0.1",

@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
-import { useAppSelector } from "../../global/hooks";
 import { Column, Row } from "../../styles/Grid";
 import { hexToRgb } from "../../utils/hextorgb";
+import sendEvent from "../../utils/sendEvent";
 import Close from "./icons/Close";
 import Maximize from "./icons/Maximize";
 import Minimize from "./icons/Minimize";
@@ -69,15 +69,7 @@ const TopIconButton = styled.button<{ close?: boolean }>`
   }
 `;
 
-const Avatar = styled.img`
-  width: 24px;
-  height: 24px;
-  object-fit: cover;
-  margin-right: ${({ theme }) => theme.space[1]};
-`;
-
 export const TopBar = () => {
-  const userPhoto = useAppSelector((state) => state.firebase?.auth?.photoURL);
   return (
     <Wrapper>
       <Row justify="space-between" align="stretch">
@@ -89,26 +81,18 @@ export const TopBar = () => {
         </Column>
         <Column fitContent height="100%">
           <Row gutter="0" align="stretch">
-            {userPhoto && (
-              <Column fitContent>
-                <Row height="100%" align="center" justify="center">
-                  <Avatar src={userPhoto} />
-                </Row>
-              </Column>
-            )}
-
             <Column fitContent>
-              <TopIconButton>
+              <TopIconButton onClick={(e) => sendEvent("minimize")}>
                 <Minimize />
               </TopIconButton>
             </Column>
             <Column fitContent>
-              <TopIconButton>
+              <TopIconButton onClick={(e) => sendEvent("maximize")}>
                 <Maximize />
               </TopIconButton>
             </Column>
             <Column fitContent>
-              <TopIconButton close>
+              <TopIconButton close onClick={(e) => sendEvent("close")}>
                 <Close />
               </TopIconButton>
             </Column>

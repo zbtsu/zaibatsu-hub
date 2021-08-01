@@ -7,11 +7,11 @@ import useAction from "./useAction";
 import { closeModal, openModal } from "../../global/slices/modalSlice";
 import { useAppSelector } from "../../global/hooks";
 import { hexToRgb } from "../hextorgb";
-import { useKey, useOutsideClickRef } from "rooks";
+import { useKey } from "rooks";
 import { animated, useSpring } from "@react-spring/web";
 import { Separator } from "../../styles/Grid";
 import Close from "../../components/TopBar/icons/Close";
-import Scrollable from "../../components/Scrollable";
+import Scrollable from "../../components/common/Scrollable";
 
 export type ModalReturn = {
   title: string;
@@ -180,12 +180,14 @@ export const useModal = (
     if (openImmediately) {
       onClick();
     }
+    //eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
   React.useEffect(() => {
     if (closeOn) {
       closeModalFn();
     }
-  }, []);
+    //eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [closeOn]);
   React.useLayoutEffect(() => {
     const currentRef = ref.current;
     if (currentRef) {
