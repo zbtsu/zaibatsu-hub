@@ -3,6 +3,33 @@ import styled from "styled-components";
 import { hexToRgb } from "../../../utils/hextorgb";
 import useRippleEffect from "../../../utils/hooks/useRippleEffect";
 import { useTransition, animated } from "@react-spring/web";
+import { getDefaultOpenKeyInList } from "../../../utils/toolkit";
+import { Center } from "../../../styles/Grid";
+interface WrapperProps {
+  noTopBorder?: boolean;
+}
+
+interface PaneProps {
+  key: string;
+  title: string;
+  disabled?: boolean;
+  disabledMessage?: string;
+  defaultOpen?: boolean;
+}
+
+type HeaderType = {
+  title: string;
+  key: string;
+  defaultOpen?: boolean;
+  disabled?: boolean;
+  disabledMessage?: string;
+};
+
+interface TabHeaderProps {
+  header: HeaderType;
+  setActive: (...args: any[]) => any;
+  isActive?: boolean;
+}
 
 const TabWrapper = styled.div``;
 
@@ -13,30 +40,55 @@ const TabHeader = styled.ul<{ noTopBorder?: boolean }>`
   list-style: none;
   margin: 0;
   padding: 0;
-  border: 1px solid ${(props) => props.theme.colors.border};
   ${(props) => props.noTopBorder && "border-top: 0;"}
-  border-left: 0;
-  border-right: 0;
 `;
 
-const TabHeaderSingleWrapper = styled.li<{ isActive?: boolean }>`
+const TabHeaderDisabledMessage = styled.span`
+  position: absolute;
+  top: calc(100% + ${(props) => props.theme.space[1]});
+  left: 0;
+  width: 100%;
+  background: ${(props) =>
+    `rgba(${hexToRgb(props.theme.colors.text, true)},0.025)`};
+  opacity: 0;
+  transform: translate(0, ${(props) => props.theme.space[1]});
+  transition: ${(props) => props.theme.transition("transform", "opacity")};
+  font-size: ${(props) => props.theme.fontSize[1]};
+  padding: ${(props) => props.theme.space[1]};
+  border: 1px solid ${(props) => props.theme.colors.border};
+`;
+
+const TabHeaderSingleWrapper = styled.li<{
+  isActive?: boolean;
+  disabled?: boolean;
+}>`
   flex: 1;
   padding: ${(props) => props.theme.space[2]} ${(props) => props.theme.space[3]};
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+  cursor: ${(props) => (props.disabled ? "not-allowed" : "pointer")};
   color: ${(props) => props.theme.colors.text};
   user-select: none;
   font-size: ${(props) => props.theme.fontSize[1]};
   letter-spacing: -${(props) => props.theme.letterSpacing[2]};
   transition: ${(props) => props.theme.transition("background-color")};
   background-color: ${(props) =>
-    props.isActive
-      ? `rgba(${hexToRgb(props.theme.colors.text, true)},0.05)`
+    !props.isActive
+      ? `rgba(${hexToRgb(props.theme.colors.text, true)},0.025)`
       : props.theme.colors.background};
+  border-bottom: ${(props) =>
+    `1px solid ${
+      props.isActive ? props.theme.colors.background : props.theme.colors.border
+    }`};
   & + & {
     border-left: 1px solid ${(props) => props.theme.colors.border};
+  }
+  &:hover {
+    ${TabHeaderDisabledMessage} {
+      opacity: 1;
+      transform: translate(0%, 0%);
+    }
   }
 `;
 
@@ -50,42 +102,29 @@ const TabContent = styled.div`
   position: relative;
 `;
 
-interface WrapperProps {
-  noTopBorder?: boolean;
-}
-
-interface PaneProps {
-  key: string;
-  title: string;
-  disabled?: boolean;
-  disabledMessage?: string;
-}
-
 const Pane: React.FC<PaneProps> = ({ children }) => {
   return <PaneWrapper>{children}</PaneWrapper>;
 };
-
-interface TabHeaderProps {
-  header: HeaderType;
-  setActive: (...args: any[]) => any;
-  isActive?: boolean;
-}
 
 const TabHeaderSingle: React.FC<TabHeaderProps> = (props) => {
   const [ref, ripples] = useRippleEffect();
   return (
     <TabHeaderSingleWrapper
+      disabled={props.header.disabled}
       isActive={props.isActive}
       ref={ref}
-      onClick={props.setActive}
+      onClick={() => !props.header.disabled && props.setActive()}
     >
+      {props.header.disabled && props.header.disabledMessage && (
+        <TabHeaderDisabledMessage>
+          <Center>{props.header.disabledMessage}</Center>
+        </TabHeaderDisabledMessage>
+      )}
       {ripples}
       {props.header.title}
     </TabHeaderSingleWrapper>
   );
 };
-
-type HeaderType = { title: string; key: string };
 
 const TabContentWrapper = styled.div`
   width: 100%;
@@ -140,7 +179,10 @@ const Wrapper: React.FC<WrapperProps> = ({ children, noTopBorder }) => {
       if (!newElem.key) return null;
       headers.push({
         title: newElem.props.title,
+        disabled: newElem.props.disabled,
+        disabledMessage: newElem.props.disabledMessage,
         key: newElem.key as string,
+        defaultOpen: newElem.props.defaultOpen,
       });
       actualChildren[newElem.key] = newElem;
     });
@@ -149,7 +191,8 @@ const Wrapper: React.FC<WrapperProps> = ({ children, noTopBorder }) => {
       ...oldPanes,
       ...actualChildren,
     }));
-    setActive(headers[0].key);
+    const activeHeader = getDefaultOpenKeyInList(headers);
+    setActive(activeHeader ? activeHeader.key : headers[0].key);
   }, [children]);
   return (
     <TabWrapper>

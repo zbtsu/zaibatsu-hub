@@ -94,6 +94,8 @@ const ToolTip = styled.span`
   padding: ${(props) => props.theme.space[1]} ${(props) => props.theme.space[2]};
   border: 1px solid ${(props) => props.theme.colors.border};
   box-shadow: ${(props) => props.theme.shadow[2]};
+  color: ${(props) => props.theme.colors.text};
+  z-index: 1000;
   ${down("md")} {
     display: none !important;
   }
@@ -165,7 +167,7 @@ const IconButton = React.forwardRef(
         }
         if (route) return push(route);
       },
-      [route, push, logoutOnClick, onClick]
+      [route, push, onClick]
     );
     return (
       <Button

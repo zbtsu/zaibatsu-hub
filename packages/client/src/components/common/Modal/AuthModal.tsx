@@ -152,7 +152,10 @@ const LoginForm = ({ setFormState }: FormProps) => {
           <Center>
             <Link
               href="#"
-              onClick={() => setTimeout(() => setFormState("register"), 10)}
+              onClick={(e) => {
+                e.preventDefault();
+                setTimeout(() => setFormState("register"), 10);
+              }}
             >
               Don't have an account? Register here!
             </Link>
@@ -162,9 +165,10 @@ const LoginForm = ({ setFormState }: FormProps) => {
           <Center>
             <Link
               href="#"
-              onClick={() =>
-                setTimeout(() => setFormState("forgotPassword"), 10)
-              }
+              onClick={(e) => {
+                e.preventDefault();
+                setTimeout(() => setFormState("forgotPassword"), 10);
+              }}
             >
               Forgot your password? Recover it!
             </Link>
@@ -252,7 +256,10 @@ const RegisterForm = ({ setFormState }: FormProps) => {
           <Center>
             <Link
               href="#"
-              onClick={() => setTimeout(() => setFormState("login"), 10)}
+              onClick={(e) => {
+                e.preventDefault();
+                setTimeout(() => setFormState("login"), 10);
+              }}
             >
               Already have an account? Login here!
             </Link>
@@ -262,9 +269,10 @@ const RegisterForm = ({ setFormState }: FormProps) => {
           <Center>
             <Link
               href="#"
-              onClick={() =>
-                setTimeout(() => setFormState("forgotPassword"), 10)
-              }
+              onClick={(e) => {
+                e.preventDefault();
+                setTimeout(() => setFormState("forgotPassword"), 10);
+              }}
             >
               Forgot your password? Recover it!
             </Link>
@@ -327,7 +335,10 @@ const ForgotPasswordForm = ({ setFormState }: FormProps) => {
           <Center>
             <Link
               href="#"
-              onClick={() => setTimeout(() => setFormState("login"), 10)}
+              onClick={(e) => {
+                e.preventDefault();
+                setTimeout(() => setFormState("login"), 10);
+              }}
             >
               Already have an account? Login here!
             </Link>
@@ -337,7 +348,10 @@ const ForgotPasswordForm = ({ setFormState }: FormProps) => {
           <Center>
             <Link
               href="#"
-              onClick={() => setTimeout(() => setFormState("register"), 10)}
+              onClick={(e) => {
+                e.preventDefault();
+                setTimeout(() => setFormState("register"), 10);
+              }}
             >
               Don't have an account? Register here!
             </Link>

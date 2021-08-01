@@ -12,6 +12,9 @@ import {
   REGISTER,
 } from "redux-persist";
 import electronStorage from "./helpers/electronStorage";
+import { settingsReducer } from "./slices/settingsSlice";
+import { characterReducer } from "./slices/characterSlice";
+import characters from "../data/characters";
 // import { constants } from "redux-firestore";
 
 const IGNORED_PERSISTED_ACTIONS = [
@@ -25,6 +28,8 @@ const IGNORED_PERSISTED_ACTIONS = [
 const rootReducer = combineReducers({
   main: mainReducer,
   modal: modalReducer,
+  settings: settingsReducer,
+  characters: characterReducer,
 });
 
 const persistedReducer = persistReducer(
@@ -33,6 +38,10 @@ const persistedReducer = persistReducer(
     version: 1,
     storage: electronStorage,
     migrate: (oldState: any) => {
+      oldState.characters = {
+        all: characters,
+        selected: [],
+      };
       return Promise.resolve(oldState);
     },
   },
@@ -60,6 +69,8 @@ console.log({ store });
 export interface RootState {
   modal: ReturnType<typeof modalReducer>;
   main: ReturnType<typeof mainReducer>;
+  settings: ReturnType<typeof settingsReducer>;
+  characters: ReturnType<typeof characterReducer>;
 }
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;

@@ -20,6 +20,7 @@ const StyledText = styled.input<{ error?: string }>`
   padding: ${(props) => props.theme.space[2]} ${(props) => props.theme.space[3]};
   outline: 0;
   border-radius: 0;
+  color: ${(props) => props.theme.colors.text};
   border: 2px solid
     ${(props) =>
       props.error ? props.theme.colors.error : props.theme.colors.border};

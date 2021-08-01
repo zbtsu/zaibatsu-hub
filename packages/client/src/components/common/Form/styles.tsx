@@ -1,6 +1,6 @@
 import styled, { DefaultTheme } from "styled-components";
-import tinycolor from "tinycolor2";
 import { hexToRgb } from "../../../utils/hextorgb";
+import { mostReadable } from "../../../utils/toolkit";
 
 export const ErrorPopup = styled.div`
   position: absolute;
@@ -8,8 +8,7 @@ export const ErrorPopup = styled.div`
   left: 0;
   width: 100%;
   background: ${(props) => props.theme.colors.error};
-  color: ${(props) =>
-    `${tinycolor.mostReadable(props.theme.colors.error, ["#FFF", "#000"])}`};
+  color: ${(props) => mostReadable(props.theme.colors.error)};
   padding: ${(props) => props.theme.space[1]} ${(props) => props.theme.space[2]};
   z-index: 10;
   opacity: 0;
@@ -60,11 +59,7 @@ export const FormMessage = styled.div<{ color: keyof DefaultTheme["colors"] }>`
   width: 100%;
   background: ${(props) =>
     `rgba(${hexToRgb(props.theme.colors[props.color], true)},0.1)`};
-  color: ${(props) =>
-    tinycolor.mostReadable(`${props.theme.colors[props.color] as string}`, [
-      "#FFF",
-      "#000",
-    ]) as unknown as string};
+  color: ${(props) => mostReadable(props.theme.colors[props.color])};
   padding: ${(props) => props.theme.space[2]} ${(props) => props.theme.space[3]};
   font-size: ${(props) => props.theme.fontSize[1]};
 `;

@@ -2,6 +2,7 @@ import React from "react";
 import styled, { DefaultTheme } from "styled-components";
 import useRippleEffect from "../../../utils/hooks/useRippleEffect";
 import tinyColor from "tinycolor2";
+import { mostReadable } from "../../../utils/toolkit";
 
 interface ButtonWrapperProps {
   color?: keyof DefaultTheme["colors"];
@@ -23,11 +24,8 @@ export const ButtonWrapper = styled.button<ButtonWrapperProps>`
       props.theme.space[props.smallPadding ? 2 : 3]
     }`};
   color: ${(props) =>
-    `${tinyColor.mostReadable(props.theme.colors[props.color || "background"], [
-      "#FFF",
-      "#000",
-    ])}`};
-  border: 2px solid ${(props) => props.theme.colors[props.color || "text"]};
+    mostReadable(props.theme.colors[props.color || "background"])};
+  border: 2px solid ${(props) => props.theme.colors[props.color || "border"]};
   cursor: pointer;
   outline: none;
   transition: ${(props) => props.theme.transition("background")};
@@ -38,10 +36,7 @@ export const ButtonWrapper = styled.button<ButtonWrapperProps>`
         10
       )}`};
     color: ${(props) =>
-      `${tinyColor.mostReadable(
-        props.theme.colors[props.color || "background"],
-        ["#FFF", "#000"]
-      )}`};
+      mostReadable(props.theme.colors[props.color || "background"])};
     &:active {
       background: ${(props) =>
         `${tinyColor(props.theme.colors[props.color || "background"]).darken(
@@ -50,6 +45,11 @@ export const ButtonWrapper = styled.button<ButtonWrapperProps>`
       transition: none;
     }
   }
+  /* svg {
+    path {
+      fill: ${(props) => props.theme.colors.text};
+    }
+  } */
 `;
 
 export const Button: React.FC<ButtonProps> = ({ children, ...rest }) => {

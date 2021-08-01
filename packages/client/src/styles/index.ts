@@ -1,4 +1,4 @@
-import { createGlobalStyle } from "styled-components";
+import styled, { createGlobalStyle } from "styled-components";
 
 export const GlobalStyle = createGlobalStyle`
   body {
@@ -25,5 +25,11 @@ export const GlobalStyle = createGlobalStyle`
     width: 0;
     height: 0;
     z-index: 1000;
+  }
+`;
+
+export const StyledSVG = styled.svg<any>`
+  path {
+    fill: ${(props) => props.theme.colors.text};
   }
 `;

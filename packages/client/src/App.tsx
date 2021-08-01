@@ -25,6 +25,7 @@ import AuthActions from "./components/common/AuthActions";
 import firebase from "firebase";
 import "firebase/auth";
 import RelativeSuspense from "./components/common/RelativeSuspense";
+import useAppTheme from "./utils/hooks/useAppTheme";
 
 const preloadSDKs = (firebaseApp: firebase.app.App) => {
   return Promise.all([
@@ -79,18 +80,26 @@ firebase.initializeApp(firebaseConfig);
 const colors = {
   light: {
     primary: "#213645",
-    secondary: "213443",
+    secondary: "#213443",
     error: "#C81D3C",
     success: "#1DC880",
     text: "#000000",
     background: "#FFFFFF",
     border: "#ececec",
   },
-  dark: {},
+  dark: {
+    primary: "#1b74b5",
+    secondary: "#16777e",
+    error: "#C81D3C",
+    success: "#1DC880",
+    text: "#ffffff",
+    background: "#141414",
+    border: "#272727",
+  },
 };
 
-const THEME = {
-  colors: colors.light,
+const THEME = (theme: "light" | "dark") => ({
+  colors: colors[theme],
   space: ["0px", "7px", "14px", "24px", "32px", "48px"],
   fontSize: ["7px", "14px", "24px", "32px", "48px"],
   borderRadius: 0,
@@ -103,7 +112,7 @@ const THEME = {
   letterSpacing: ["0.0", "0.03em", "0.04em", "0.06em"],
   transition: (...args: string[]) =>
     args.map((arg) => `${arg} 0.2s ease-in-out`).join(","),
-};
+});
 
 firebase.auth().onAuthStateChanged(
   (e) => {
@@ -117,40 +126,41 @@ firebase.auth().onAuthStateChanged(
 );
 
 function App() {
+  const theme = useAppTheme();
   const firebaseApp = useFirebaseApp();
   preloadSDKs(firebaseApp).then(() => preloadData(firebaseApp));
   return (
-    <Provider store={store}>
-      <PersistGate persistor={persistor}>
-        <ThemeProvider theme={THEME}>
-          <Routes.Wrapper>
-            <AppContainer>
-              <GlobalStyle />
-              <TopBar />
+    <ThemeProvider theme={THEME(theme)}>
+      <Routes.Wrapper>
+        <AppContainer>
+          <GlobalStyle />
+          <TopBar />
+          <RelativeSuspense>
+            <AppContent>
+              <AuthActions />
               <RelativeSuspense>
-                <AppContent>
-                  <AuthActions />
-                  <RelativeSuspense>
-                    <Sidebar />
-                  </RelativeSuspense>
-                  <RelativeSuspense>
-                    <Picker />
-                  </RelativeSuspense>
-                  <Routes.Switch />
-                </AppContent>
+                <Sidebar />
               </RelativeSuspense>
-            </AppContainer>
-          </Routes.Wrapper>
-        </ThemeProvider>
-      </PersistGate>
-    </Provider>
+              <RelativeSuspense>
+                <Picker />
+              </RelativeSuspense>
+              <Routes.Switch />
+            </AppContent>
+          </RelativeSuspense>
+        </AppContainer>
+      </Routes.Wrapper>
+    </ThemeProvider>
   );
 }
 
 const AppWrapped = () => {
   return (
     <FirebaseAppProvider firebaseConfig={firebaseConfig} suspense={true}>
-      <App />
+      <Provider store={store}>
+        <PersistGate persistor={persistor}>
+          <App />
+        </PersistGate>
+      </Provider>
     </FirebaseAppProvider>
   );
 };

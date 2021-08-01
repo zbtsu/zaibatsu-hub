@@ -1,17 +1,26 @@
 import React from "react";
+import SettingsForms from "../../common/Settings";
 import { PageHeader, PageWrapper } from "../../../styles/Common";
 import Tabs from "../../common/Tabs";
+import { useUser } from "reactfire";
 
 const Settings = () => {
+  const user = useUser();
+  console.log(user.data);
   return (
     <PageWrapper>
       <PageHeader>Settings</PageHeader>
       <Tabs.Wrapper noTopBorder>
-        <Tabs.Pane key="jakoto" title="User Settings">
-          PREJAKOTO1
+        <Tabs.Pane key="app-settings" title="App Settings">
+          <SettingsForms.App />
         </Tabs.Pane>
-        <Tabs.Pane key="jakoto2" title="App Settings">
-          PREJAKOTO2
+        <Tabs.Pane
+          key="profile-settings"
+          title="Profile Settings"
+          disabled={!user.data}
+          disabledMessage="You need to be logged in to do that!"
+        >
+          <SettingsForms.Profile />
         </Tabs.Pane>
       </Tabs.Wrapper>
     </PageWrapper>

@@ -27,6 +27,7 @@ const DEFAULTS: Electron.BrowserWindowConstructorOptions = {
   frame: false,
   minHeight: 720,
   minWidth: 1100,
+  autoHideMenuBar: true,
   // transparent: true,
   webPreferences: {
     allowRunningInsecureContent: false,
