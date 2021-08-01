@@ -1,4 +1,4 @@
-import { app, BrowserWindow, dialog, screen } from "electron";
+import { app, BrowserWindow, dialog, screen, Rectangle } from "electron";
 import * as events from "./events";
 import * as Store from "electron-store";
 import { buildURL } from "./utils";
@@ -25,6 +25,8 @@ const DEFAULTS: Electron.BrowserWindowConstructorOptions = {
   width: DIMENSIONS.W,
   height: DIMENSIONS.H,
   frame: false,
+  minHeight: 720,
+  minWidth: 1100,
   // transparent: true,
   webPreferences: {
     allowRunningInsecureContent: false,
@@ -36,10 +38,13 @@ const DEFAULTS: Electron.BrowserWindowConstructorOptions = {
 };
 
 function createWindow() {
-  const winBounds = store.get("winBounds");
+  const winBounds = store.get<string>("winBounds") as {
+    bounds: any;
+    isMaximised: boolean;
+  };
   const options: Electron.BrowserWindowConstructorOptions = Object.assign(
     { ...DEFAULTS },
-    winBounds
+    { ...winBounds.bounds }
   );
   let mainWindow: BrowserWindow;
   mainWindow = new BrowserWindow({
@@ -51,10 +56,32 @@ function createWindow() {
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
+  mainWindow.on("closed", () => {
+    mainWindow = null;
+  });
+  mainWindow.on("resized", () => {
+    store.set("winBounds", {
+      bounds: mainWindow.getBounds(),
+      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
+    });
+  });
+  mainWindow.on("maximize", () => {
+    store.set("winBounds", {
+      bounds: mainWindow.getBounds(),
+      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
+    });
+  });
+
+  mainWindow.on("moved", () => {
+    store.set("winBounds", {
+      bounds: mainWindow.getBounds(),
+      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
+    });
+  });
 
   mainWindow.on("close", () => {
     store.set("winBounds", {
-      bounds: mainWindow?.getBounds(),
+      bounds: mainWindow.getBounds(),
       maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
     });
     mainWindow = null;
