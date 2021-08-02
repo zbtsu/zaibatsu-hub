@@ -5,13 +5,13 @@ import tinyColor from "tinycolor2";
 import { mostReadable } from "../../../utils/toolkit";
 
 interface ButtonWrapperProps {
-  color?: keyof DefaultTheme["colors"];
+  color?: keyof Omit<DefaultTheme["colors"], "trafficLights">;
   width?: string;
   smallPadding?: boolean;
 }
 
 interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-  color?: keyof DefaultTheme["colors"];
+  color?: keyof Omit<DefaultTheme["colors"], "trafficLights">;
   width?: string;
   smallPadding?: boolean;
 }

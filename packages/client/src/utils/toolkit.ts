@@ -38,3 +38,7 @@ export const getCharacterIdsInMap = (characters: Character[]) =>
 
 export const filterWithSameId = (characters: Character[], id: number[]) =>
   characters.filter((c) => id.includes(c.id));
+
+export const isMac = (devTrue?: boolean) => {
+  return devTrue || process.platform === "darwin";
+};

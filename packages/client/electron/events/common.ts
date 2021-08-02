@@ -1,3 +1,4 @@
+import { WINDOW_EVENTS } from "../constants/events";
 import { BrowserWindow, dialog, ipcMain, screen, app } from "electron";
 import * as fs from "fs";
 import { buildURL } from "../utils";
@@ -46,52 +47,21 @@ const makeNewWindow = (
 };
 
 function common(mainWindow: BrowserWindow, __dirname: string) {
-  ipcMain.on("minimize", (event) => {
+  ipcMain.on(WINDOW_EVENTS.DO_MINIMIZE, (event) => {
     const window = BrowserWindow.fromId(event.frameId);
     window.minimize();
   });
-  ipcMain.on("maximize", (event) => {
+  ipcMain.on(WINDOW_EVENTS.DO_MAXIMIZE, (event) => {
     const window = BrowserWindow.fromId(event.frameId);
     if (window.isMaximized()) {
       return window.restore();
     }
     return window.maximize();
   });
-  ipcMain.on("close", (event) => {
+  ipcMain.on(WINDOW_EVENTS.DO_CLOSE, (event) => {
     const window = BrowserWindow.fromWebContents(event.sender);
     window.close();
     // mainWindow.close();
-  });
-  ipcMain.on("save-combo", (event, data, title = "Combo.zaic") => {
-    const options: Electron.SaveDialogOptions = {
-      title: "Save Combo",
-      buttonLabel: "Save",
-      defaultPath: title,
-      filters: [{ name: "Tekken Combo", extensions: ["zaic"] }],
-    };
-    dialog.showSaveDialog(null, options).then(({ filePath }) => {
-      fs.writeFileSync(filePath, data, "utf-8");
-    });
-    event.sender.send("notification", "Combo Exported!");
-  });
-  ipcMain.on("open-combo", (event, arg: string) => {
-    const primaryDisplay = screen.getPrimaryDisplay();
-    const DIMENSIONS: NWOpen = {
-      width: percentage(primaryDisplay.bounds.width, 90),
-      height: 150,
-      x: percentage(primaryDisplay.bounds.width, 10) / 2,
-      y: 200,
-      onTop: true,
-    };
-    const window = makeNewWindow(arg, DIMENSIONS, __dirname, true);
-  });
-  ipcMain.on("getNodeEnv", (event) => {
-    console.log("nodeenv: " + process.env.NODE_ENV || "production");
-    event.sender.send("NODE_ENV", process.env.NODE_ENV || "production");
-  });
-  ipcMain.on("getVersion", (event) => {
-    console.log("version: " + process.env.npm_package_version);
-    event.sender.send("VERSION", app.getVersion());
   });
 }
 

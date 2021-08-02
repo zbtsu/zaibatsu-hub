@@ -56,18 +56,19 @@ interface ColProps {
   width?: string;
   size?: ColSize;
   fitContent?: boolean;
+  grow?: "1" | "0";
+  shrink?: "1" | "0";
 }
 
 export const Column = styled.div<ColProps>`
-  max-width: 100%;
-  ${(props) =>
-    !props.fitContent &&
-    `flex: ${lerp(props.size || 1 / 12, 0, 12, 12, 0)} 0 calc(${getPercent(
-      props.size || 12,
-      12
-    )}% - ${
-      props.size && `${props.size}` === "12" ? `0px` : `var(--gutter)`
-    });`}
+  width: 100%;
+  max-width: ${(props) =>
+    props.size
+      ? `${getPercent(props.size, 12)}%`
+      : props.fitContent
+      ? "max-content"
+      : "100%"};
+  flex: ${(props) => `${props.grow || 1} ${props.shrink || 1} 0`};
   ${(props) => props.height && `height: ${props.height};`}
   ${(props) => props.width && `width: ${props.width};`}
 `;

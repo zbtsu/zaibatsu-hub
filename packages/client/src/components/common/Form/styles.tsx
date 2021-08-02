@@ -55,7 +55,9 @@ export const ErrorMessage = styled.div`
   font-size: ${(props) => props.theme.fontSize[1]};
 `;
 
-export const FormMessage = styled.div<{ color: keyof DefaultTheme["colors"] }>`
+export const FormMessage = styled.div<{
+  color: keyof Omit<DefaultTheme["colors"], "trafficLights">;
+}>`
   width: 100%;
   background: ${(props) =>
     `rgba(${hexToRgb(props.theme.colors[props.color], true)},0.1)`};

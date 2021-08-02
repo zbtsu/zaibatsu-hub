@@ -12,6 +12,12 @@ declare module "styled-components" {
       text: string;
       background: string;
       border: string;
+      alert: string;
+      trafficLights: {
+        max: string;
+        min: string;
+        close: string;
+      };
     };
     shadow: string[];
     space: string[];

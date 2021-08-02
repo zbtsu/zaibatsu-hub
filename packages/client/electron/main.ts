@@ -2,6 +2,8 @@ import { app, BrowserWindow, dialog, screen, Rectangle } from "electron";
 import * as events from "./events";
 import * as Store from "electron-store";
 import { buildURL } from "./utils";
+import { WINDOW_EVENTS } from "./constants/events";
+
 // import * as vibrancy from "electron-vibrancy";
 
 process.env.NODE_ENV = process.env.NODE_ENV || "production";
@@ -67,6 +69,21 @@ function createWindow() {
     });
   });
   mainWindow.on("maximize", () => {
+    mainWindow.webContents.send(
+      WINDOW_EVENTS.ON_MAXIMIZE,
+      mainWindow.isMaximized()
+    );
+    store.set("winBounds", {
+      bounds: mainWindow.getBounds(),
+      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
+    });
+  });
+
+  mainWindow.on("unmaximize", () => {
+    mainWindow.webContents.send(
+      WINDOW_EVENTS.ON_MINIMIZE,
+      mainWindow.isMaximized()
+    );
     store.set("winBounds", {
       bounds: mainWindow.getBounds(),
       maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),

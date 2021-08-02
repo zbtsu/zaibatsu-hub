@@ -1,11 +1,13 @@
 import React from "react";
-import styled from "styled-components";
+import { useRef } from "react";
+import styled, { DefaultTheme } from "styled-components";
+import { WINDOW_EVENTS } from "../../constants/events";
+import { useMaximized } from "../../services/useMaximized";
 import { Column, Row } from "../../styles/Grid";
 import { hexToRgb } from "../../utils/hextorgb";
 import sendEvent from "../../utils/sendEvent";
-import Close from "./icons/Close";
-import Maximize from "./icons/Maximize";
-import Minimize from "./icons/Minimize";
+import { isMac } from "../../utils/toolkit";
+import { Close, Maximize, Minimize, Unmaximize } from "./icons";
 
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.background};
@@ -69,36 +71,108 @@ const TopIconButton = styled.button<{ close?: boolean }>`
   }
 `;
 
-export const TopBar = () => {
+const TrafficLight = styled.button<{
+  color: keyof DefaultTheme["colors"]["trafficLights"];
+}>`
+  background: ${(props) => props.theme.colors.trafficLights[props.color]};
+  padding: 0;
+  width: ${({ theme }) => theme.space[2]};
+  height: ${({ theme }) => theme.space[2]};
+  border-radius: 100%;
+  cursor: pointer;
+  border: 0;
+  -webkit-app-region: none;
+  transition: ${(props) => props.theme.transition("filter")};
+  &:hover {
+    filter: brightness(1.1);
+  }
+  &:active {
+    filter: brightness(0.9);
+  }
+`;
+
+const TrafficRow = styled(Row)`
+  padding: ${({ theme }) => theme.space[1]} ${({ theme }) => theme.space[3]};
+  padding-right: 0;
+`;
+
+const BrandBox = () => (
+  <Column size="3">
+    <Brand>
+      <BrandImage src="icon.png" />
+      <BrandText>Zaibatsu Hub</BrandText>
+    </Brand>
+  </Column>
+);
+
+const WinBoxes = () => {
+  const isMaximized = useMaximized();
   return (
-    <Wrapper>
-      <Row justify="space-between" align="stretch">
-        <Column size="1">
-          <Brand>
-            <BrandImage src="icon.png" />
-            <BrandText>Zaibatsu Hub</BrandText>
-          </Brand>
+    <Column fitContent height="100%">
+      <Row gutter="0" align="stretch">
+        <Column fitContent>
+          <TopIconButton onClick={(e) => sendEvent(WINDOW_EVENTS.DO_MINIMIZE)}>
+            <Minimize />
+          </TopIconButton>
         </Column>
-        <Column fitContent height="100%">
-          <Row gutter="0" align="stretch">
-            <Column fitContent>
-              <TopIconButton onClick={(e) => sendEvent("minimize")}>
-                <Minimize />
-              </TopIconButton>
-            </Column>
-            <Column fitContent>
-              <TopIconButton onClick={(e) => sendEvent("maximize")}>
-                <Maximize />
-              </TopIconButton>
-            </Column>
-            <Column fitContent>
-              <TopIconButton close onClick={(e) => sendEvent("close")}>
-                <Close />
-              </TopIconButton>
-            </Column>
-          </Row>
+        <Column fitContent>
+          <TopIconButton onClick={(e) => sendEvent(WINDOW_EVENTS.DO_MAXIMIZE)}>
+            {isMaximized ? <Unmaximize /> : <Maximize />}
+          </TopIconButton>
+        </Column>
+        <Column fitContent>
+          <TopIconButton
+            close
+            onClick={(e) => sendEvent(WINDOW_EVENTS.DO_CLOSE)}
+          >
+            <Close />
+          </TopIconButton>
         </Column>
       </Row>
+    </Column>
+  );
+};
+
+const MacBoxes = () => (
+  <Column fitContent height="100%">
+    <TrafficRow gutter="1" align="center" height="100%">
+      <Column fitContent>
+        <TrafficLight
+          color="close"
+          onClick={(e) => sendEvent(WINDOW_EVENTS.DO_CLOSE)}
+        />
+      </Column>
+      <Column fitContent>
+        <TrafficLight
+          color="min"
+          onClick={(e) => sendEvent(WINDOW_EVENTS.DO_MINIMIZE)}
+        />
+      </Column>
+      <Column fitContent>
+        <TrafficLight
+          color="max"
+          onClick={(e) => sendEvent(WINDOW_EVENTS.DO_MAXIMIZE)}
+        />
+      </Column>
+    </TrafficRow>
+  </Column>
+);
+
+export const TopBar = () => {
+  const isMacRef = useRef(isMac());
+  return (
+    <Wrapper>
+      {isMacRef.current ? (
+        <Row height="36px" justify="space-between" align="stretch">
+          <MacBoxes />
+          <BrandBox />
+        </Row>
+      ) : (
+        <Row height="36px" justify="space-between" align="stretch">
+          <BrandBox />
+          <WinBoxes />
+        </Row>
+      )}
     </Wrapper>
   );
 };

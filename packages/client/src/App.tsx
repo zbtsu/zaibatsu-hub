@@ -83,18 +83,30 @@ const colors = {
     secondary: "#213443",
     error: "#C81D3C",
     success: "#1DC880",
+    alert: "#FFC107",
     text: "#000000",
     background: "#FFFFFF",
     border: "#ececec",
+    trafficLights: {
+      max: "#33C949",
+      min: "#FDBD41",
+      close: "#FD5652",
+    },
   },
   dark: {
     primary: "#1b74b5",
     secondary: "#16777e",
     error: "#C81D3C",
     success: "#1DC880",
+    alert: "#FFC107",
     text: "#ffffff",
     background: "#141414",
     border: "#272727",
+    trafficLights: {
+      max: "#33C949",
+      min: "#FDBD41",
+      close: "#FD5652",
+    },
   },
 };
 

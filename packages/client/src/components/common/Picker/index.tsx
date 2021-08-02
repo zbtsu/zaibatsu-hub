@@ -1,5 +1,6 @@
 import { animated, useSpring } from "@react-spring/web";
 import React from "react";
+import { useState } from "react";
 import { SiCheckmarx } from "react-icons/si";
 import styled, { useTheme } from "styled-components";
 import { Character } from "../../../data/characters";
@@ -8,6 +9,7 @@ import {
   deselectCharacter,
   selectCharacter,
 } from "../../../global/slices/characterSlice";
+import { Column, Row } from "../../../styles/Grid";
 import { hexToRgb } from "../../../utils/hextorgb";
 import useAction from "../../../utils/hooks/useAction";
 import useRippleEffect from "../../../utils/hooks/useRippleEffect";
@@ -15,14 +17,14 @@ import Scrollable from "../Scrollable";
 
 const Wrapper = styled.div`
   border-right: 1px solid ${(props) => props.theme.colors.border};
-  width: 256px;
+  width: 152px;
 `;
 
 const CharacterStyles = {
   Wrapper: styled.div`
     display: flex;
     width: 100%;
-    border-bottom: 1px solid ${(props) => props.theme.colors.border};
+    /* border-bottom: 1px solid ${(props) => props.theme.colors.border}; */
     transition: ${(props) => props.theme.transition("background-color")};
     cursor: pointer;
     user-select: none;
@@ -58,6 +60,8 @@ const CharacterStyles = {
     color: var(--text-color);
     letter-spacing: -${(props) => props.theme.letterSpacing[2]};
     font-weight: 600;
+    padding: 0;
+    margin: 0;
   `,
   Selected: styled.span`
     position: absolute;
@@ -113,9 +117,9 @@ const SingleCharacter = (props: Character) => {
       }}
     >
       {ripples}
-      <CharacterStyles.Image>
+      {/* <CharacterStyles.Image>
         <img src={props.image} alt={props.name} />
-      </CharacterStyles.Image>
+      </CharacterStyles.Image> */}
       <CharacterStyles.Description>
         <CharacterStyles.Text>{props.name}</CharacterStyles.Text>
         {/* <p>{props.description}</p> */}
@@ -127,15 +131,50 @@ const SingleCharacter = (props: Character) => {
   );
 };
 
+const SearchWrapper = styled.div`
+  width: 100%;
+  height: 30px;
+  font-size: ${(props) => props.theme.fontSize[1]};
+  display: flex;
+  input {
+    outline: 0;
+  }
+`;
+
+const StyledInput = styled.input`
+  width: 100%;
+  height: 100%;
+  font-size: ${(props) => props.theme.fontSize[1]};
+  border: none;
+  background: transparent;
+  color: ${(props) => props.theme.colors.text};
+  border-radius: 0;
+  padding: ${(props) => props.theme.space[2]};
+  margin: 0;
+  font-weight: 600;
+  font-family: inherit;
+  border-bottom: 1px solid ${(props) => props.theme.colors.border};
+`;
+
 const Picker = () => {
+  const [search, setSearch] = useState("");]
   const characters = useAppSelector((state) => state.characters.all);
   return (
     <Wrapper>
-      <Scrollable>
-        {characters?.map((e) => {
-          return <SingleCharacter key={e.id + e.name} {...e} />;
-        })}
-      </Scrollable>
+      <Row gutter="0" direction="column" height="100%">
+        <Column width="100%" grow="0" shrink="0">
+          <SearchWrapper>
+            <StyledInput onChange={onChange} value={search} />
+          </SearchWrapper>
+        </Column>
+        <Column shrink="0" height="100%">
+          <Scrollable>
+            {characters?.map((e) => {
+              return <SingleCharacter key={e.id + e.name} {...e} />;
+            })}
+          </Scrollable>
+        </Column>
+      </Row>
     </Wrapper>
   );
 };

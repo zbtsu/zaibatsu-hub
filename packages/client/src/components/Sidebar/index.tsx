@@ -195,57 +195,39 @@ const Sidebar = () => {
   return (
     <RelativeSuspense>
       <Wrapper>
-        <Row
-          height="100%"
-          direction="row"
-          align="stretch"
-          justify="space-between"
-        >
+        <Row height="100%" direction="column" justify="space-between">
           <Column>
-            <Row direction="row">
-              <Column fitContent width="100%">
-                {sideBar.map((item, index) => (
-                  <IconButton key={index} {...item} />
-                ))}
-              </Column>
-            </Row>
+            {sideBar.map((item, index) => (
+              <IconButton key={index} {...item} />
+            ))}
           </Column>
-          <Column>
-            <Row height="100%" direction="row" align="flex-end">
-              <Column fitContent width="100%">
-                {!user.data && (
-                  <>
-                    <IconButton
-                      ref={modalRef}
-                      bottom
-                      icon={Login}
-                      title="Login"
-                    />
-                    {modal}
-                  </>
-                )}
-                {user.data && (
-                  <IconButton
-                    bottom
-                    icon={() =>
-                      user?.data?.photoURL && (
-                        <Center>
-                          <Avatar src={user.data.photoURL} />
-                        </Center>
-                      )
-                    }
-                    title="Logout"
-                    onClick={() => auth.signOut()}
-                  />
-                )}
-                <IconButton
-                  bottom
-                  icon={Settings}
-                  title="Settings"
-                  route="/settings"
-                />
-              </Column>
-            </Row>
+          <Column shrink="1" grow="0">
+            {!user.data && (
+              <>
+                <IconButton ref={modalRef} bottom icon={Login} title="Login" />
+                {modal}
+              </>
+            )}
+            {user.data && (
+              <IconButton
+                bottom
+                icon={() =>
+                  user?.data?.photoURL && (
+                    <Center>
+                      <Avatar src={user.data.photoURL} />
+                    </Center>
+                  )
+                }
+                title="Logout"
+                onClick={() => auth.signOut()}
+              />
+            )}
+            <IconButton
+              bottom
+              icon={Settings}
+              title="Settings"
+              route="/settings"
+            />
           </Column>
         </Row>
       </Wrapper>
