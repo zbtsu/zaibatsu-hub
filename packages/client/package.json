@@ -128,6 +128,7 @@
     "@types/styled-components": "^5.1.11",
     "@types/testing-library__dom": "^7.5.0",
     "@types/tinycolor2": "^1.4.3",
+    "@types/wait-on": "^5.3.1",
     "craco-esbuild": "^0.3.3",
     "cross-env": "^7.0.3",
     "csp-html-webpack-plugin": "^5.1.0",

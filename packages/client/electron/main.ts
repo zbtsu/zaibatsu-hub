@@ -68,6 +68,10 @@ function createWindow() {
       maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
     });
   });
+  mainWindow.webContents.on("did-create-window", (childWindow) => {
+    // For example...
+    console.log("opened");
+  });
   mainWindow.on("maximize", () => {
     mainWindow.webContents.send(
       WINDOW_EVENTS.ON_MAXIMIZE,
