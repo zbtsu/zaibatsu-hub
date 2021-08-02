@@ -97,7 +97,7 @@ const TrafficRow = styled(Row)`
 `;
 
 const BrandBox = () => (
-  <Column size="3">
+  <Column size="6">
     <Brand>
       <BrandImage src="icon.png" />
       <BrandText>Zaibatsu Hub</BrandText>
@@ -163,7 +163,7 @@ export const TopBar = () => {
   return (
     <Wrapper>
       {isMacRef.current ? (
-        <Row height="36px" justify="space-between" align="stretch">
+        <Row height="36px" justify="flex-start" align="stretch">
           <MacBoxes />
           <BrandBox />
         </Row>

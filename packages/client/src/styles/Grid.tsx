@@ -62,13 +62,15 @@ interface ColProps {
 
 export const Column = styled.div<ColProps>`
   width: 100%;
-  max-width: ${(props) =>
-    props.size
-      ? `${getPercent(props.size, 12)}%`
-      : props.fitContent
-      ? "max-content"
-      : "100%"};
-  flex: ${(props) => `${props.grow || 1} ${props.shrink || 1} 0`};
+  max-width: ${(props) => getPercent(props.size || 12, 12)}%;
+  ${(props) => props.fitContent && "max-width: max-content;"}
+  flex: ${(props) => `${props.grow || 1} ${props.shrink || 0} 0%`};
+  ${(props) =>
+    props.size &&
+    `flex: ${props.size} 1 calc(${getPercent(
+      props.size || 12,
+      12
+    )}% - var(--gutter))`}
   ${(props) => props.height && `height: ${props.height};`}
   ${(props) => props.width && `width: ${props.width};`}
 `;
@@ -81,7 +83,6 @@ export const Row = styled.div<RowProps>`
   align-items: ${(props) => props.align || "flex-start"};
   justify-content: ${(props) => props.justify || "flex-start"};
   gap: ${(props) => props.theme.space[parseInt(props.gutter || "2")]};
-  --gutter: ${(props) => props.theme.space[parseInt(props.gutter || "2")]};
   ${Column} {
     --gutter: ${(props) => props.theme.space[parseInt(props.gutter || "2")]};
   }

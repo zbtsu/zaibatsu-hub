@@ -1,5 +1,5 @@
 import { animated, useSpring } from "@react-spring/web";
-import React from "react";
+import React, { useCallback } from "react";
 import { useState } from "react";
 import { SiCheckmarx } from "react-icons/si";
 import styled, { useTheme } from "styled-components";
@@ -157,8 +157,14 @@ const StyledInput = styled.input`
 `;
 
 const Picker = () => {
-  const [search, setSearch] = useState("");]
+  const [search, setSearch] = useState("");
   const characters = useAppSelector((state) => state.characters.all);
+  const onChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      setSearch(e.target.value);
+    },
+    [setSearch]
+  );
   return (
     <Wrapper>
       <Row gutter="0" direction="column" height="100%">
