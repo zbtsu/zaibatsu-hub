@@ -36,6 +36,7 @@
     "styled-breakpoints": "^10.0.1",
     "styled-components": "^5.3.0",
     "tinycolor2": "^1.4.2",
+    "use-debounce": "^7.0.0",
     "web-vitals": "^1.0.1",
     "yup": "^0.32.9"
   },

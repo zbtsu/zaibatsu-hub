@@ -144,7 +144,7 @@ const Wrapper: React.FC<WrapperProps> = ({ children, noTopBorder }) => {
 
   const transition = useTransition(active, {
     keys: (i) => i,
-
+    initial: { opacity: 1, transform: "translateX(0%)", position: "relative" },
     from: {
       opacity: 0,
       transform: "translateX(-50%)",

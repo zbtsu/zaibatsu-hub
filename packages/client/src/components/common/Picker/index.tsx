@@ -1,7 +1,9 @@
+import React, { useCallback, useEffect, useState } from "react";
 import { animated, useSpring } from "@react-spring/web";
-import React, { useCallback } from "react";
-import { useState } from "react";
 import { SiCheckmarx } from "react-icons/si";
+import { RiSearchLine } from "react-icons/ri";
+import { MdClear } from "react-icons/md";
+import { useDebounce } from "use-debounce";
 import styled, { useTheme } from "styled-components";
 import { Character } from "../../../data/characters";
 import { useAppSelector } from "../../../global/hooks";
@@ -14,6 +16,7 @@ import { hexToRgb } from "../../../utils/hextorgb";
 import useAction from "../../../utils/hooks/useAction";
 import useRippleEffect from "../../../utils/hooks/useRippleEffect";
 import Scrollable from "../Scrollable";
+import { searchInCharacterArrayByName } from "../../../utils/toolkit";
 
 const Wrapper = styled.div`
   border-right: 1px solid ${(props) => props.theme.colors.border};
@@ -131,47 +134,100 @@ const SingleCharacter = (props: Character) => {
   );
 };
 
-const SearchWrapper = styled.div`
-  width: 100%;
-  height: 30px;
-  font-size: ${(props) => props.theme.fontSize[1]};
-  display: flex;
-  input {
+const Search = {
+  Wrapper: styled.div`
+    width: 100%;
+    height: ${(props) => props.theme.space[5]};
+    font-size: ${(props) => props.theme.fontSize[1]};
+    display: flex;
+    position: relative;
+  `,
+  Input: styled.input`
+    width: 100%;
     outline: 0;
-  }
-`;
+    height: 100%;
+    font-size: ${(props) => props.theme.fontSize[1]};
+    border: none;
+    background: transparent;
+    color: ${(props) => props.theme.colors.text};
+    border-radius: 0;
+    padding: ${(props) => props.theme.space[2]};
+    margin: 0;
+    font-weight: 600;
+    font-family: inherit;
+    border-bottom: 1px solid ${(props) => props.theme.colors.border};
+    transition: ${(props) => props.theme.transition("border-bottom")};
+    &:focus {
+      border-bottom: 1px solid ${(props) => props.theme.colors.text};
+    }
+  `,
+  Icon: styled.span<{ hasValue?: boolean }>`
+    position: absolute;
+    right: ${(props) => props.theme.space[2]};
+    top: 50%;
+    transform: translate(0, -50%);
+    display: flex;
+    align-items: center;
+    ${(props) =>
+      props.hasValue &&
+      `
+      cursor: pointer;
+      opacity: 0.2;
+      transition: ${props.theme.transition("opacity")};
+      &:hover {
+        opacity: 1;
+      }
+    `}
+  `,
+};
 
-const StyledInput = styled.input`
-  width: 100%;
-  height: 100%;
-  font-size: ${(props) => props.theme.fontSize[1]};
-  border: none;
-  background: transparent;
-  color: ${(props) => props.theme.colors.text};
-  border-radius: 0;
-  padding: ${(props) => props.theme.space[2]};
-  margin: 0;
-  font-weight: 600;
-  font-family: inherit;
-  border-bottom: 1px solid ${(props) => props.theme.colors.border};
-`;
+interface SearchProps {
+  set: (query: string) => any;
+}
 
-const Picker = () => {
+const SearchInput = (props: SearchProps) => {
   const [search, setSearch] = useState("");
-  const characters = useAppSelector((state) => state.characters.all);
+  const [debouncedSearch] = useDebounce(search, 250);
   const onChange = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
+    (e) => {
       setSearch(e.target.value);
     },
     [setSearch]
   );
+  const clear = useCallback(
+    (e) => {
+      setSearch("");
+    },
+    [setSearch]
+  );
+  useEffect(() => {
+    props.set(debouncedSearch);
+  }, [debouncedSearch]);
+  return (
+    <Search.Wrapper>
+      <Search.Input
+        placeholder="Search..."
+        onChange={onChange}
+        value={search}
+      />
+      <Search.Icon hasValue={Boolean(search)} onClick={clear}>
+        {search ? <MdClear /> : <RiSearchLine />}
+      </Search.Icon>
+    </Search.Wrapper>
+  );
+};
+
+const Picker = () => {
+  const [search, setSearch] = useState("");
+  const characters = useAppSelector((state) =>
+    searchInCharacterArrayByName(state.characters.all, search)
+  );
+
   return (
     <Wrapper>
       <Row gutter="0" direction="column" height="100%">
         <Column width="100%" grow="0" shrink="0">
-          <SearchWrapper>
-            <StyledInput onChange={onChange} value={search} />
-          </SearchWrapper>
+          <SearchInput set={setSearch} />
         </Column>
         <Column shrink="0" height="100%">
           <Scrollable>

@@ -174,6 +174,7 @@ export const useModal = (
   const openModalFn = useAction(openModal);
   const closeModalFn = useAction(closeModal);
   const onClick = React.useCallback(() => {
+    console.log("ONCLICK");
     openModalFn({ id: id.current });
   }, [id, openModalFn]);
   React.useEffect(() => {
@@ -199,7 +200,7 @@ export const useModal = (
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ref]);
+  }, [ref.current]);
   return [
     ref,
     createPortal(

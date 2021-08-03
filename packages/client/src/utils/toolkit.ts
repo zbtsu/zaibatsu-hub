@@ -42,3 +42,10 @@ export const filterWithSameId = (characters: Character[], id: number[]) =>
 export const isMac = (devTrue?: boolean) => {
   return devTrue || process.platform === "darwin";
 };
+
+export const searchInCharacterArrayByName = (
+  array: Character[],
+  name: string
+) => {
+  return array.filter((c) => c.name.toLowerCase().includes(name.toLowerCase()));
+};

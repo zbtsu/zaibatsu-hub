@@ -34,11 +34,9 @@ const AppSettings = () => {
     <Wrapper>
       <form onSubmit={handleSubmit(onSubmit)}>
         <Select
-          errors={formState.errors}
           label="Theme"
           name="theme"
           control={control}
-          register={register}
           items={[
             { label: "System Theme", value: "system" },
             { label: "Light Theme", value: "light" },

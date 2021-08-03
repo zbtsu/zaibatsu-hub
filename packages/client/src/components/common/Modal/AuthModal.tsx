@@ -403,6 +403,7 @@ const AuthModal = (): ModalReturn => {
     }
   }, [state]);
   const user = useUser();
+  console.log(user?.data?.uid);
   return {
     title,
     subtitle,

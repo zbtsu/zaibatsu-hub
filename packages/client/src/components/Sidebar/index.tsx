@@ -202,7 +202,7 @@ const Sidebar = () => {
             ))}
           </Column>
           <Column shrink="1" grow="0">
-            {!user.data && (
+            {!user?.data?.uid && (
               <>
                 <IconButton ref={modalRef} bottom icon={Login} title="Login" />
                 {modal}

@@ -7,6 +7,7 @@ export const GlobalStyle = createGlobalStyle`
     color: ${({ theme }) => theme.colors.text};
     padding: 0;
     margin: 0;
+    font-size: ${(p) => p.theme.fontSize[1]};
     letter-spacing: -${(props) => props.theme.letterSpacing[1]};
   }
 

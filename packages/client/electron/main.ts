@@ -70,7 +70,16 @@ function createWindow() {
   });
   mainWindow.webContents.on("did-create-window", (childWindow) => {
     // For example...
-    console.log("opened");
+    childWindow;
+  });
+  mainWindow.webContents.setWindowOpenHandler(({ url }) => {
+    console.log(url);
+    return {
+      action: "allow",
+      overrideBrowserWindowOptions: {
+        frame: true,
+      },
+    };
   });
   mainWindow.on("maximize", () => {
     mainWindow.webContents.send(

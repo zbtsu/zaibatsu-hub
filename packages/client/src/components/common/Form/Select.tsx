@@ -1,5 +1,5 @@
 import React from "react";
-import { Control, DeepMap, UseFormRegister } from "react-hook-form";
+import { Control, Controller, DeepMap, UseFormRegister } from "react-hook-form";
 import styled from "styled-components";
 import ReactSelect from "react-select";
 import { ErrorPopup, FormControlWrapper, StyledLabel } from "./styles";
@@ -7,12 +7,17 @@ import { hexToRgb } from "../../../utils/hextorgb";
 import { useController } from "react-hook-form";
 import { mostReadable } from "../../../utils/toolkit";
 
-const StyledSelect = styled(ReactSelect)<{ error?: boolean | string }>`
+interface SelectProps {
+  error?: boolean | string;
+  border?: boolean;
+}
+
+const StyledSelect = styled(ReactSelect)<SelectProps>`
   .Select__control {
     width: 100%;
     height: 46px;
     font-size: ${(props) => props.theme.fontSize[1]};
-    border: 2px solid
+    border: ${(props) => (props.border ? "2px" : "0px")} solid
       ${(props) =>
         props.error ? props.theme.colors.error : props.theme.colors.border};
     background: ${(props) => props.theme.colors.background};
@@ -41,6 +46,14 @@ const StyledSelect = styled(ReactSelect)<{ error?: boolean | string }>`
       )},0.5)`};
   }
 
+  .Select__multi {
+    &-value__remove {
+      svg {
+        fill: ${(props) => props.theme.colors.error};
+      }
+    }
+  }
+
   .Select__single-value {
     color: ${(props) =>
       props.error ? props.theme.colors.error : props.theme.colors.text};
@@ -50,9 +63,13 @@ const StyledSelect = styled(ReactSelect)<{ error?: boolean | string }>`
   }
 
   .Select__control--is-focused {
-    box-shadow: 0 0 0 1px
+    box-shadow: 0 0 0
       ${(props) =>
-        props.error ? props.theme.colors.error : props.theme.colors.text};
+        props.border
+          ? "1px"
+          : "0px" + props.error
+          ? props.theme.colors.error
+          : props.theme.colors.text};
     outline: none;
   }
 
@@ -65,9 +82,10 @@ const StyledSelect = styled(ReactSelect)<{ error?: boolean | string }>`
     background: ${(props) => props.theme.colors.background};
     border: 1px solid
       ${(props) =>
-        props.error ? props.theme.colors.error : props.theme.colors.text};
+        props.error ? props.theme.colors.error : props.theme.colors.border};
     border-radius: 0;
     z-index: 1001;
+    box-shadow: 0 20px 40px -40px ${(p) => `rgba(${hexToRgb(p.theme.colors.text, true)},0.25)`};
     &-list {
       padding: 0;
     }
@@ -113,14 +131,23 @@ type Option = {
 
 interface Props {
   name: string;
-  register: UseFormRegister<any>;
-  errors: DeepMap<any, any>;
-  label: string;
+  label?: string;
   items: Array<Option>;
   control: Control<any>;
+  border?: boolean;
+  multiple?: boolean;
+  [key: string]: any;
 }
 
-const Select = ({ name, label, items, control }: Props) => {
+const Select = ({
+  name,
+  label,
+  items,
+  control,
+  border = true,
+  multiple,
+  ...rest
+}: Props) => {
   const {
     field: { ref, value, ...inputProps },
     formState: { errors },
@@ -133,22 +160,32 @@ const Select = ({ name, label, items, control }: Props) => {
 
   return (
     <FormControlWrapper>
-      <StyledLabel htmlFor={`input-${name}`}>{label}</StyledLabel>
+      {label && <StyledLabel htmlFor={`input-${name}`}>{label}</StyledLabel>}
       <StyledSelect
-        value={items.find((i) => i.value === value) || ""}
+        border={border}
+        isMulti={multiple}
+        value={
+          multiple
+            ? items.filter((i) =>
+                value ? value.some((x: string) => x === i.value) : false
+              )
+            : items.find((i) => i.value === value)
+        }
         classNamePrefix="Select"
         id={`input-${name}`}
         {...inputProps}
-        onChange={(e: Option) =>
+        onChange={(e: Option) => {
+          console.log(e);
           inputProps.onChange({
             target: {
               name,
-              value: e.value,
+              value: Array.isArray(e) ? e.map((x) => x.value) : e.value,
             },
-          })
-        }
+          });
+        }}
         options={items}
         error={error}
+        {...rest}
       />
       {error?.message && <ErrorPopup>{error?.message}</ErrorPopup>}
     </FormControlWrapper>
