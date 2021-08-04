@@ -26,6 +26,7 @@ const StyledScrollbar = styled(Scrollbars)`
 const Scrollable: React.FC<ScrollbarProps> = ({ children, ...rest }) => {
   return (
     <StyledScrollbar
+      hideTracksWhenNotNeeded
       autoHide
       {...(rest as any)}
       renderTrackVertical={(props) => (
