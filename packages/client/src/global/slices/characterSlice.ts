@@ -14,7 +14,7 @@ const removeFromArrayWithIds = (arr: Character[], characters: Character[]) => {
 };
 
 const characterSlice = createSlice({
-  name: "main",
+  name: "characters",
   initialState: {
     all: [],
     selected: [],

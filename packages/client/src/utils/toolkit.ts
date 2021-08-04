@@ -1,6 +1,7 @@
 import { createPipe, filter, isTruthy, prop } from "remeda";
 import tinycolor from "tinycolor2";
 import { Character } from "../data/characters";
+import tags, { TagOptions } from "../data/tags";
 
 type AnyObject = Record<string | number, any>;
 
@@ -48,4 +49,11 @@ export const searchInCharacterArrayByName = (
   name: string
 ) => {
   return array.filter((c) => c.name.toLowerCase().includes(name.toLowerCase()));
+};
+
+export const getTagLabelByValue = (tagValues: string[]) => {
+  const tags = TagOptions;
+  return tags
+    .filter((tag) => tagValues.includes(tag.value))
+    .map((e) => e.label);
 };

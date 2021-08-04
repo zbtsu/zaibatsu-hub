@@ -4,8 +4,8 @@ import { StyledSVG } from "../../../styles";
 function Close(props: React.SVGProps<SVGSVGElement>) {
   return (
     <StyledSVG
-      width={36}
-      height={36}
+      width={10}
+      height={10}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -13,7 +13,7 @@ function Close(props: React.SVGProps<SVGSVGElement>) {
       <path
         fillRule="evenodd"
         clipRule="evenodd"
-        d="M18.5 18.17L24.33 24l.67-.67-5.83-5.83L25 11.67l-.67-.67-5.83 5.83L12.67 11l-.67.67 5.83 5.83L12 23.33l.67.67 5.83-5.83z"
+        d="M.91 0L0 .91 4.091 5 0 9.09l.91.91L5 5.909l4.09 4.09.91-.908L5.91 5 10 .91 9.09 0 5 4.09.91 0z"
         fill="#000"
       />
     </StyledSVG>

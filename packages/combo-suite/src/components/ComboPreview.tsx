@@ -57,7 +57,6 @@ const ComboPreview: React.FC<Props> = ({
             e.type !== 'tooltip'
               ? imageRender && imageRender(icons.get(e.content))
               : tooltipRender && tooltipRender(e.content)
-          console.log({ component, imageRender, tooltipRender })
           return component
         })}
       </div>

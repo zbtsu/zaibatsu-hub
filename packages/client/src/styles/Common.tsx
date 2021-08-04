@@ -34,7 +34,8 @@ export const PageWrapper = styled.div`
 `;
 
 export const Avatar = styled.img`
-  width: 24px;
-  height: 24px;
+  width: 100%;
+  height: 100%;
+  max-width: 36px;
   object-fit: cover;
 `;

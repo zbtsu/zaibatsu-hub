@@ -10,10 +10,13 @@ const Wrapper = styled.div`
   }
 `;
 
-const RelativeSuspense: React.FC<{}> = ({ children }) => {
+const RelativeSuspense: React.FC<{ fixed?: boolean }> = ({
+  children,
+  fixed,
+}) => {
   return (
     <Wrapper>
-      <Suspense fallback={<Spinner />}>{children}</Suspense>
+      <Suspense fallback={<Spinner fixed={fixed} />}>{children}</Suspense>
     </Wrapper>
   );
 };

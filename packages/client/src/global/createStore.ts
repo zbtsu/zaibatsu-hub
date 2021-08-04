@@ -14,6 +14,7 @@ import {
 import electronStorage from "./helpers/electronStorage";
 import { settingsReducer } from "./slices/settingsSlice";
 import { characterReducer } from "./slices/characterSlice";
+import { filterReducer } from "./slices/filterSlice";
 import characters from "../data/characters";
 // import { constants } from "redux-firestore";
 
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   modal: modalReducer,
   settings: settingsReducer,
   characters: characterReducer,
+  filters: filterReducer,
 });
 
 const persistedReducer = persistReducer(
@@ -41,6 +43,10 @@ const persistedReducer = persistReducer(
       oldState.characters = {
         all: characters,
         selected: [],
+      };
+      oldState.filters = {
+        filter: "",
+        tags: [],
       };
       return Promise.resolve(oldState);
     },
@@ -63,7 +69,6 @@ export const store = configureStore({
       },
     }),
 });
-console.log({ store });
 
 // Infer the `RootState` and `AppDispatch` types from the store itself
 export interface RootState {
@@ -71,6 +76,7 @@ export interface RootState {
   main: ReturnType<typeof mainReducer>;
   settings: ReturnType<typeof settingsReducer>;
   characters: ReturnType<typeof characterReducer>;
+  filters: ReturnType<typeof filterReducer>;
 }
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;

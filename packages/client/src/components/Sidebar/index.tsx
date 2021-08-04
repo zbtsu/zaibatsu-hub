@@ -190,8 +190,9 @@ const IconButton = React.forwardRef(
 const Sidebar = () => {
   const user = useUser();
   const auth = useAuth();
-  const [modalRef, modal] = useModal(AuthModal);
-  console.log(user);
+  const [modalRef, modal] = useModal(AuthModal, {
+    closeOn: Boolean(user?.data?.uid),
+  });
   return (
     <RelativeSuspense>
       <Wrapper>

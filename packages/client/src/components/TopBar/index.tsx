@@ -12,6 +12,7 @@ import { Close, Maximize, Minimize, Unmaximize } from "./icons";
 const Wrapper = styled.div`
   background: ${({ theme }) => theme.colors.background};
   width: 100%;
+  height: 32px;
   -webkit-app-region: drag;
   font-size: ${({ theme }) => theme.fontSize[1]};
   border-bottom: 1px solid ${({ theme }) => theme.colors.border};
@@ -26,14 +27,16 @@ const Brand = styled.div`
 `;
 
 const BrandImage = styled.img`
-  width: 22px;
-  height: 22px;
+  width: 17px;
+  height: 17px;
   object-fit: contain;
 `;
 
 const BrandText = styled.h1`
-  font-size: ${({ theme }) => theme.fontSize[1]};
+  font-size: ${(p) => p.theme.fontSize[1]};
+  letter-spacing: -${(p) => p.theme.letterSpacing[2]};
   margin: 0;
+  font-weight: 600;
 `;
 
 const TopIconButton = styled.button<{ close?: boolean }>`
@@ -44,14 +47,16 @@ const TopIconButton = styled.button<{ close?: boolean }>`
   margin: 0;
   background: none;
   border: none;
-  cursor: pointer;
+  /* cursor: pointer; */
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100%;
   transition: ${(props) => props.theme.transition("background")};
+  height: 100%;
+  min-width: ${(p) => p.theme.space[5]};
   svg {
     transition: ${(props) => props.theme.transition("fill")};
+    object-fit: contain;
     * {
       fill: ${({ theme }) => theme.colors.text};
     }
@@ -109,7 +114,7 @@ const WinBoxes = () => {
   const isMaximized = useMaximized();
   return (
     <Column fitContent height="100%">
-      <Row gutter="0" align="stretch">
+      <Row gutter="0" align="stretch" height="100%">
         <Column fitContent>
           <TopIconButton onClick={(e) => sendEvent(WINDOW_EVENTS.DO_MINIMIZE)}>
             <Minimize />
@@ -163,12 +168,12 @@ export const TopBar = () => {
   return (
     <Wrapper>
       {isMacRef.current ? (
-        <Row height="36px" justify="flex-start" align="stretch">
+        <Row height="32px" justify="flex-start" align="stretch">
           <MacBoxes />
           <BrandBox />
         </Row>
       ) : (
-        <Row height="36px" justify="space-between" align="stretch">
+        <Row height="32px" justify="space-between" align="stretch">
           <BrandBox />
           <WinBoxes />
         </Row>

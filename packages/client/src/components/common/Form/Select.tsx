@@ -175,7 +175,6 @@ const Select = ({
         id={`input-${name}`}
         {...inputProps}
         onChange={(e: Option) => {
-          console.log(e);
           inputProps.onChange({
             target: {
               name,

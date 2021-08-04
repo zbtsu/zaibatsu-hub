@@ -36,7 +36,6 @@ export const useFirebasePromise = (
       return result;
     }
   };
-  console.log({ state });
   return [state, wrapFirebaseAction];
 };
 

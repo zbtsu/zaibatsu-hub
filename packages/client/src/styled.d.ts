@@ -19,6 +19,7 @@ declare module "styled-components" {
         close: string;
       };
     };
+    colorTheme: "dark" | "light";
     shadow: string[];
     space: string[];
     borderRadius: number;

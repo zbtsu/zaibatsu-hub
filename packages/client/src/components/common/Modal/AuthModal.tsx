@@ -23,7 +23,7 @@ import { closeModal } from "../../../global/slices/modalSlice";
 import useAction from "../../../utils/hooks/useAction";
 import { useAuth, useUser } from "reactfire";
 import firebase from "firebase/app";
-import { SiFacebook, SiGoogle, SiTwitter } from "react-icons/si";
+import { SiFacebook, SiGithub, SiGoogle, SiTwitter } from "react-icons/si";
 
 type ModalState = "login" | "register" | "forgotPassword";
 
@@ -57,7 +57,19 @@ const SocialAuth = () => {
           <Paragraph>Or you can use your social account to login.</Paragraph>
         </Center>
       </Column>
-      <Column size="4">
+      <Column size="3">
+        <Button
+          smallPadding
+          width="100%"
+          onClick={() => {
+            const provider = new firebase.auth.GithubAuthProvider();
+            auth.signInWithPopup(provider);
+          }}
+        >
+          <SiGithub size="24" />
+        </Button>
+      </Column>
+      <Column size="3">
         <Button
           smallPadding
           width="100%"
@@ -69,7 +81,7 @@ const SocialAuth = () => {
           <SiFacebook size="24" />
         </Button>
       </Column>
-      <Column size="4">
+      <Column size="3">
         <Button
           smallPadding
           width="100%"
@@ -81,7 +93,7 @@ const SocialAuth = () => {
           <SiGoogle size="24" />
         </Button>
       </Column>
-      <Column size="4">
+      <Column size="3">
         <Button
           smallPadding
           width="100%"
@@ -202,7 +214,7 @@ const RegisterForm = ({ setFormState }: FormProps) => {
         closeModalFn();
         return auth.currentUser?.sendEmailVerification();
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
     },
     [closeModalFn, registerWrapper, auth]
@@ -403,7 +415,6 @@ const AuthModal = (): ModalReturn => {
     }
   }, [state]);
   const user = useUser();
-  console.log(user?.data?.uid);
   return {
     title,
     subtitle,

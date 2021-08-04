@@ -11,3 +11,11 @@ export function hexToRgb<A extends string, T extends boolean>(
   ];
   return join ? hexArr.join(",") : (hexArr as number[]);
 }
+
+export function hexToRGBAString<A extends string, T extends number>(
+  hex: A,
+  alpha: T
+) {
+  const rgbString = hexToRgb(hex, true);
+  return `rgba(${rgbString},${alpha})`;
+}

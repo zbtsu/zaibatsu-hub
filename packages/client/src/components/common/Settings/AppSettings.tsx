@@ -25,7 +25,6 @@ const AppSettings = () => {
     defaultValues: initialValues,
     resolver: yupResolver(AppSettingsValidation),
   });
-  console.log(formState);
   const onSubmit = useCallback(
     (data) => changeSettingsAction(data),
     [changeSettingsAction]

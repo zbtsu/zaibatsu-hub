@@ -3,8 +3,8 @@ import * as React from "react";
 function Unmaximize(props: React.SVGProps<SVGSVGElement>) {
   return (
     <svg
-      width={36}
-      height={36}
+      width={10}
+      height={10}
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       {...props}
@@ -12,7 +12,7 @@ function Unmaximize(props: React.SVGProps<SVGSVGElement>) {
       <path
         fillRule="evenodd"
         clipRule="evenodd"
-        d="M15 14v-3h10v10h-3v3H12V14h3zm-2 1v8h8v-8h-8zm9 5h2v-8h-8v2h6v6z"
+        d="M2 2V0h8v8H8v2H0V2h2zm7 5H8V2H3V1h6v6zM1 3v6h6V3H1z"
         fill="#000"
       />
     </svg>

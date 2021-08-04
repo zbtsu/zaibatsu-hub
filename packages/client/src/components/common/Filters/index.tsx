@@ -1,12 +1,14 @@
 import React from "react";
+import { useEffect } from "react";
 import { useWatch } from "react-hook-form";
 import { useForm } from "react-hook-form";
 import styled from "styled-components";
 import { TagOptions } from "../../../data/tags";
 import { Column, Row } from "../../../styles/Grid";
+import useAction from "../../../utils/hooks/useAction";
 import Select from "../Form/Select";
 import TextToggle from "../Form/TextToggle";
-
+import { changeFilter } from "../../../global/slices/filterSlice";
 const Styles = {
   Wrapper: styled.div`
     border-bottom: 1px solid ${(props) => props.theme.colors.border};
@@ -25,6 +27,13 @@ const Filters = () => {
     control,
     name: ["tags", "filter"],
   });
+  const changeFilterFn = useAction(changeFilter);
+  useEffect(() => {
+    changeFilterFn({
+      tags,
+      filter,
+    });
+  }, [tags, filter]);
   return (
     <Styles.Wrapper>
       <Row align="center" justify="space-between">

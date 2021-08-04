@@ -73,7 +73,7 @@ const ModalClose = styled.button`
   position: absolute;
   top: 0;
   right: 0;
-  padding: 0;
+  padding: ${(p) => p.theme.space[1]} ${(p) => p.theme.space[2]};
   margin: 0;
   display: flex;
   align-items: center;
@@ -171,10 +171,12 @@ export const useModal = (
   const { content, title, subtitle } = useModalContent();
   const ref = useRef<HTMLDivElement | HTMLButtonElement>(null);
   const id = useRef(generateId());
+  const isModalOpen = useAppSelector(
+    (state) => state?.modal?.open === id.current
+  );
   const openModalFn = useAction(openModal);
   const closeModalFn = useAction(closeModal);
   const onClick = React.useCallback(() => {
-    console.log("ONCLICK");
     openModalFn({ id: id.current });
   }, [id, openModalFn]);
   React.useEffect(() => {

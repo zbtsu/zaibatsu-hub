@@ -5,7 +5,7 @@ type SettingsType = {
 };
 
 const settingsSlice = createSlice({
-  name: "main",
+  name: "settings",
   initialState: {
     theme: "system",
   } as SettingsType,

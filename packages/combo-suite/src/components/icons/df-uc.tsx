@@ -2,8 +2,9 @@ import * as React from 'react'
 
 const SvgDfUc = (props: React.SVGProps<SVGSVGElement>) => (
   <svg
-    width={41}
-    height={42}
+    width='1em'
+    height='1em'
+    viewBox='0 0 41 42'
     fill='none'
     xmlns='http://www.w3.org/2000/svg'
     {...props}

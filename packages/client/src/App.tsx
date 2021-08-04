@@ -121,21 +121,11 @@ const THEME = (theme: "light" | "dark") => ({
       true
     )}, 0.2)`;
   }),
+  colorTheme: theme,
   letterSpacing: ["0.0", "0.03em", "0.04em", "0.06em"],
   transition: (...args: string[]) =>
     args.map((arg) => `${arg} 0.2s ease-in-out`).join(","),
 });
-
-firebase.auth().onAuthStateChanged(
-  (e) => {
-    console.log("AUTH STATE CHANGE");
-    console.log(e);
-  },
-  (e) => {
-    console.log("ERROR< AUTH");
-    console.error(e);
-  }
-);
 
 function App() {
   const theme = useAppTheme();

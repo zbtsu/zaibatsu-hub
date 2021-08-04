@@ -9,7 +9,6 @@ const AuthActions = () => {
     canClose: false,
     closeOn: user?.data?.emailVerified,
   });
-  console.log();
   if (!user?.data) return null;
   if (user?.data?.emailVerified) return null;
   return modalReturn[1];

@@ -6,6 +6,7 @@
   "homepage": ".",
   "repository": "https://github.com/zbtsu/zaibatsu-hub/",
   "dependencies": {
+    "@zbtsu/combo-suite": "link:../combo-suite",
     "@hookform/resolvers": "^2.6.1",
     "@react-firebase/firestore": "^0.5.5",
     "@react-spring/web": "^9.2.4",

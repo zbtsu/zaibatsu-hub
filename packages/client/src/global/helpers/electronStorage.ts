@@ -2,8 +2,6 @@ import Store from "electron-store";
 
 const store = new Store();
 
-console.log(store);
-
 export default (function createWebStorage() {
   let storage = store;
   return {

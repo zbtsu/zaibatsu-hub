@@ -6,7 +6,6 @@ import { useUser } from "reactfire";
 
 const Settings = () => {
   const user = useUser();
-  console.log(user.data);
   return (
     <PageWrapper>
       <PageHeader description="Let's change some stuff.">Settings</PageHeader>
