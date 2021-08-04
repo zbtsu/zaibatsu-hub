@@ -53,20 +53,21 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     ...options,
   });
-
+  const setWindowBounds = () => {
+    if (!mainWindow) return;
+    store.set("winBounds", {
+      bounds: mainWindow.getBounds(),
+      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
+    });
+  };
   mainWindow.loadURL(buildURL(""));
 
   mainWindow.on("closed", () => {
     mainWindow = null;
   });
-  mainWindow.on("closed", () => {
-    mainWindow = null;
-  });
+
   mainWindow.on("resized", () => {
-    store.set("winBounds", {
-      bounds: mainWindow.getBounds(),
-      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
-    });
+    store.set("winBounds", setWindowBounds);
   });
   mainWindow.webContents.on("did-create-window", (childWindow) => {
     // For example...
@@ -86,10 +87,7 @@ function createWindow() {
       WINDOW_EVENTS.ON_MAXIMIZE,
       mainWindow.isMaximized()
     );
-    store.set("winBounds", {
-      bounds: mainWindow.getBounds(),
-      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
-    });
+    store.set("winBounds", setWindowBounds);
   });
 
   mainWindow.on("unmaximize", () => {
@@ -97,24 +95,14 @@ function createWindow() {
       WINDOW_EVENTS.ON_MINIMIZE,
       mainWindow.isMaximized()
     );
-    store.set("winBounds", {
-      bounds: mainWindow.getBounds(),
-      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
-    });
+    setWindowBounds();
   });
 
-  mainWindow.on("moved", () => {
-    store.set("winBounds", {
-      bounds: mainWindow.getBounds(),
-      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
-    });
-  });
+  mainWindow.on("moved", () => {});
 
   mainWindow.on("close", () => {
-    store.set("winBounds", {
-      bounds: mainWindow.getBounds(),
-      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
-    });
+    setWindowBounds();
+
     mainWindow = null;
   });
 

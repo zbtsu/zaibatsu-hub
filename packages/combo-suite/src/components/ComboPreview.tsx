@@ -4,36 +4,21 @@ import { useIconContext } from './IconContext'
 
 interface Props extends React.HTMLAttributes<HTMLDivElement> {
   combo: pureCombo[] | string
-  tooltipRender?: (
-    tooltip: string,
-    divProps?: React.HTMLAttributes<HTMLDivElement>
-  ) => React.ReactElement
+  tooltipRender?: (tooltip: string, type: pureCombo) => React.ReactElement
   imageRender?: (
     Image: React.FC<React.SVGProps<SVGSVGElement>>,
-    divProps?: React.HTMLAttributes<HTMLDivElement>,
-    svgProps?: React.SVGProps<SVGSVGElement>
+    type: pureCombo
   ) => React.ReactElement
 }
 
-const initialToolTipRender = (
-  tooltip: string,
-  divProps?: React.HTMLAttributes<HTMLDivElement>
-) => {
-  return (
-    <div className='tooltip' {...divProps}>
-      {tooltip}
-    </div>
-  )
+const initialToolTipRender: Props['tooltipRender'] = (tooltip: string) => {
+  return <div className='tooltip'>{tooltip}</div>
 }
 
-const initialImageRender: Props['imageRender'] = (
-  Image,
-  divProps,
-  svgProps
-) => {
+const initialImageRender: Props['imageRender'] = (Image) => {
   return (
-    <div className='image' {...divProps}>
-      <Image {...svgProps} />
+    <div className='image'>
+      <Image />
     </div>
   )
 }
@@ -55,8 +40,8 @@ const ComboPreview: React.FC<Props> = ({
         {parsedCombo.map((e) => {
           const component =
             e.type !== 'tooltip'
-              ? imageRender && imageRender(icons.get(e.content))
-              : tooltipRender && tooltipRender(e.content)
+              ? imageRender && imageRender(icons.get(e.content), e)
+              : tooltipRender && tooltipRender(e.content, e)
           return component
         })}
       </div>
@@ -67,8 +52,8 @@ const ComboPreview: React.FC<Props> = ({
       {combo.map((e) => {
         const component =
           e.type !== 'tooltip'
-            ? imageRender && imageRender(icons.get(e.content))
-            : tooltipRender && tooltipRender(e.content)
+            ? imageRender && imageRender(icons.get(e.content), e)
+            : tooltipRender && tooltipRender(e.content, e)
         return component
       })}
     </div>

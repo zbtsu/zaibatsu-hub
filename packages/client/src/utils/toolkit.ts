@@ -57,3 +57,13 @@ export const getTagLabelByValue = (tagValues: string[]) => {
     .filter((tag) => tagValues.includes(tag.value))
     .map((e) => e.label);
 };
+
+export const makeID = (length = 32) =>
+  [
+    Math.random().toString(32).substr(2),
+    Math.random().toString(32).substr(2),
+    Math.random().toString(32).substr(2),
+    Math.random().toString(32).substr(2),
+  ]
+    .join("")
+    .substr(0, length);

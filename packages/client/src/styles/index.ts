@@ -9,11 +9,15 @@ export const GlobalStyle = createGlobalStyle`
     margin: 0;
     font-size: ${(p) => p.theme.fontSize[1]};
     letter-spacing: -${(props) => props.theme.letterSpacing[1]};
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke: 0.1px;
   }
 
   * {
     box-sizing: border-box;
-    font-family: 'Inter';
+    font-family: inherit;
+    -webkit-font-smoothing: antialiased;
+    -webkit-text-stroke: 0.1px;
   }
   iframe {
     width: 0% !important;

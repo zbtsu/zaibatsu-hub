@@ -2,7 +2,7 @@ import React from "react";
 import styled, { useTheme } from "styled-components";
 import { ComboPreview } from "@zbtsu/combo-suite";
 import type { ICombo } from "../../../models/Combo";
-import { Column, Margin, Row } from "../../../styles/Grid";
+import { Center, Column, Margin, Row } from "../../../styles/Grid";
 import { getTagLabelByValue } from "../../../utils/toolkit";
 import tags from "../../../data/tags";
 import TagPreview from "./TagPreview";
@@ -23,11 +23,19 @@ const Styles = {
   `,
 };
 
-const ImageRender = styled.div`
+const ImageRender = styled.div<{ action?: "movement" | "attack" }>`
+  ${(p) =>
+    p.theme.colorTheme === "light" &&
+    `
+    filter: invert(1);
+  `}
+  display: flex;
+  align-items: center;
+  justify-content: center;
   svg {
     ${(p) => `
-    width: ${p.theme.space[4]};
-    height: ${p.theme.space[4]};
+    width: ${p.action === "movement" ? p.theme.space[3] : p.theme.space[4]};
+    height: ${p.action === "movement" ? p.theme.space[3] : p.theme.space[4]};
   `}
   }
 `;
@@ -35,13 +43,6 @@ const ImageRender = styled.div`
 const StyledComboPreview = styled(ComboPreview)`
   gap: ${(p) => p.theme.space[2]};
   display: flex;
-  ${(p) =>
-    p.theme.colorTheme !== "dark" &&
-    `
-  .${ImageRender} {
-    filter: invert(1)
-  }
-  `}
 `;
 
 const SmallCombo = (props: Props) => {
@@ -60,9 +61,9 @@ const SmallCombo = (props: Props) => {
       <Margin gutter="3" />
       <StyledComboPreview
         combo={props.string}
-        imageRender={(Svg) => {
+        imageRender={(Svg, props) => {
           return (
-            <ImageRender>
+            <ImageRender action={props.action}>
               <Svg />
             </ImageRender>
           );

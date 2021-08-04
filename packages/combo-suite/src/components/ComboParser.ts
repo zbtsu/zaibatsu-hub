@@ -22,6 +22,7 @@ const comboTransform = (e: string) => {
     if (allInputs.all.includes(e)) {
       return {
         type: 'button',
+        action: allInputs.attacks.includes(e) ? 'attack' : 'movement',
         content: suffixAndSort(e)
       }
     }
@@ -51,6 +52,7 @@ const comboTransform = (e: string) => {
 
 export type pureCombo = {
   type: 'svg' | 'next' | 'tooltip'
+  action?: 'movement' | 'attack'
   content: string
 }
 
