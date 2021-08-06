@@ -59,6 +59,7 @@ function common(mainWindow: BrowserWindow, __dirname: string) {
     return window.maximize();
   });
   ipcMain.on(WINDOW_EVENTS.DO_CLOSE, (event) => {
+    console.log("trying to close");
     const window = BrowserWindow.fromWebContents(event.sender);
     window.close();
     // mainWindow.close();

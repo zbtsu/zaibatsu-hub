@@ -33,10 +33,10 @@ const BrandImage = styled.img`
 `;
 
 const BrandText = styled.h1`
-  font-size: ${(p) => p.theme.fontSize[1]};
+  font-size: 12px;
   letter-spacing: -${(p) => p.theme.letterSpacing[2]};
   margin: 0;
-  font-weight: 600;
+  font-weight: 400;
 `;
 
 const TopIconButton = styled.button<{ close?: boolean }>`

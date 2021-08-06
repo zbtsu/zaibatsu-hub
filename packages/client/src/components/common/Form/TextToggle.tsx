@@ -34,7 +34,6 @@ interface Props {
 const TextToggle = ({ name, control, label, value: propVal }: Props) => {
   const {
     field: { onChange },
-    fieldState: {},
   } = useController({ name, control });
   const value = useWatch({
     control,

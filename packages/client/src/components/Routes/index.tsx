@@ -3,6 +3,7 @@ import { Route, Switch, HashRouter as Router } from "react-router-dom";
 import MainContent from "../common/MainContent";
 import Settings from "./pages/Settings";
 import Home from "./pages/Home";
+import NewCombo from "./pages/new/NewCombo";
 
 // interface Props {}
 
@@ -26,6 +27,9 @@ const Routes = {
           </Route>
           <Route path="/settings" exact>
             <Settings />
+          </Route>
+          <Route path="/new/combo" exact>
+            <NewCombo />
           </Route>
         </Switch>
       </MainContent>

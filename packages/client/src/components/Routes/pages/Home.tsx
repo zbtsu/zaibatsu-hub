@@ -1,14 +1,18 @@
 import React from "react";
-import { PageHeader, PageWrapper } from "../../../styles/Common";
-import { useFirestore, useFirestoreCollectionData, useUser } from "reactfire";
+import { PageHeader, PageInner, PageWrapper } from "../../../styles/Common";
+import { useFirestore, useFirestoreCollectionData } from "reactfire";
 import Filters from "../../common/Filters";
 import { SmallCombo } from "../../common/ComboPreview";
 import { useAppSelector } from "../../../global/hooks";
 import type { ICombo } from "../../../models/Combo";
 import RelativeSuspense from "../../common/RelativeSuspense";
 import { useMemo } from "react";
+import { Button } from "../../common/Form/Button";
+import { IoAdd } from "react-icons/io5";
+import { useHistory } from "react-router-dom";
+import Tabs from "../../common/Tabs";
 
-const MainContainer = () => {
+const OnlineCombos = () => {
   const { filter, tags } = useAppSelector((state) => state.filters);
   const fireStore = useFirestore();
   const combosRef = useMemo(() => {
@@ -32,17 +36,63 @@ const MainContainer = () => {
   );
 };
 
+const LocalCombos = () => {
+  const { filter, tags } = useAppSelector((state) => state.filters);
+  const localCombos = useAppSelector((state) => state.combos.all);
+  // const combosRef = useMemo(() => {
+  //   let combos = fireStore.collection("combos");
+  //   if (tags.length)
+  //     combos = combos.where(`tags`, `array-contains-any`, tags) as any;
+
+  //   if (filter) {
+  //   }
+
+  //   return combos;
+  // }, [fireStore, tags, filter]);
+
+  return (
+    <>
+      {localCombos?.map((e) => (
+        <SmallCombo {...e} />
+      ))}
+    </>
+  );
+};
+
 const Home = () => {
-  const user = useUser();
+  const history = useHistory();
   return (
     <PageWrapper>
-      <PageHeader description="Hey, alright! This is where your favorites and stuff live.">
+      <PageHeader
+        EndContent={() => (
+          <Button
+            noBorder
+            onClick={(e) => {
+              history.push("/new/combo");
+            }}
+          >
+            <IoAdd size={18} />
+          </Button>
+        )}
+        description="Hey, alright! This is where your favorites and stuff live."
+      >
         Home
       </PageHeader>
       <Filters />
-      <RelativeSuspense fixed={false}>
-        <MainContainer />
-      </RelativeSuspense>
+      <Tabs.Wrapper>
+        <Tabs.Pane key="local" title="Local Combos">
+          <PageInner>
+            <LocalCombos />
+          </PageInner>
+        </Tabs.Pane>
+        <Tabs.Pane key="global" title="Global Combos">
+          <PageInner>
+            <RelativeSuspense fixed={false}>
+              <OnlineCombos />
+            </RelativeSuspense>
+          </PageInner>
+        </Tabs.Pane>
+      </Tabs.Wrapper>
     </PageWrapper>
   );
 };

@@ -16,6 +16,7 @@ import { settingsReducer } from "./slices/settingsSlice";
 import { characterReducer } from "./slices/characterSlice";
 import { filterReducer } from "./slices/filterSlice";
 import characters from "../data/characters";
+import { comboReducer } from "./slices/comboSlice";
 // import { constants } from "redux-firestore";
 
 const IGNORED_PERSISTED_ACTIONS = [
@@ -32,6 +33,7 @@ const rootReducer = combineReducers({
   settings: settingsReducer,
   characters: characterReducer,
   filters: filterReducer,
+  combos: comboReducer,
 });
 
 const persistedReducer = persistReducer(
@@ -77,6 +79,7 @@ export interface RootState {
   settings: ReturnType<typeof settingsReducer>;
   characters: ReturnType<typeof characterReducer>;
   filters: ReturnType<typeof filterReducer>;
+  combos: ReturnType<typeof comboReducer>;
 }
 // Inferred type: {posts: PostsState, comments: CommentsState, users: UsersState}
 export type AppDispatch = typeof store.dispatch;

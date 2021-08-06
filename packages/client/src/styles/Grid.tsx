@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { mostReadable } from "tinycolor2";
-import { lerp } from "../utils/lerp";
 import { getPercent } from "../utils/percent";
 
 type GutterSize = "0" | "1" | "2" | "3" | "4" | "5";
@@ -58,6 +57,8 @@ interface ColProps {
   fitContent?: boolean;
   grow?: "1" | "0";
   shrink?: "1" | "0";
+  align?: "center" | "flex-start" | "flex-end";
+  justify?: "center" | "flex-start" | "flex-end";
 }
 
 export const Column = styled.div<ColProps>`
@@ -73,6 +74,8 @@ export const Column = styled.div<ColProps>`
     )}% - var(--gutter))`}
   ${(props) => props.height && `height: ${props.height};`}
   ${(props) => props.width && `width: ${props.width};`}
+  ${(p) => p.align && `align-self: ${p.align};`}
+  ${(p) => p.justify && `justify-self: ${p.align};`}
 `;
 
 export const Row = styled.div<RowProps>`

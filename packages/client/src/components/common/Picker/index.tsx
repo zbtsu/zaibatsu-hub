@@ -186,6 +186,7 @@ interface SearchProps {
 }
 
 const SearchInput = (props: SearchProps) => {
+  const { set } = props;
   const [search, setSearch] = useState("");
   const [debouncedSearch] = useDebounce(search, 250);
   const onChange = useCallback(
@@ -201,8 +202,8 @@ const SearchInput = (props: SearchProps) => {
     [setSearch]
   );
   useEffect(() => {
-    props.set(debouncedSearch);
-  }, [debouncedSearch]);
+    set(debouncedSearch);
+  }, [set, debouncedSearch]);
   return (
     <Search.Wrapper>
       <Search.Input

@@ -1,7 +1,7 @@
 import { createPipe, filter, isTruthy, prop } from "remeda";
 import tinycolor from "tinycolor2";
 import { Character } from "../data/characters";
-import tags, { TagOptions } from "../data/tags";
+import { TagOptions } from "../data/tags";
 
 type AnyObject = Record<string | number, any>;
 
@@ -67,3 +67,14 @@ export const makeID = (length = 32) =>
   ]
     .join("")
     .substr(0, length);
+
+export const makeOptionsFromCharacters = (characters: Character[]) => {
+  return characters.map((c) => ({
+    label: `${c.name}`,
+    value: c.id,
+  }));
+};
+
+export const isValidNumber = (value: any) => {
+  return !isNaN(value);
+};

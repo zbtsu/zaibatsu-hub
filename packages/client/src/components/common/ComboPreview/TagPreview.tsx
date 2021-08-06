@@ -1,6 +1,8 @@
 import React from "react";
+import { useRef } from "react";
 import styled from "styled-components";
-import { hexToRgb, hexToRGBAString } from "../../../utils/hextorgb";
+import { hexToRGBAString } from "../../../utils/hextorgb";
+import { generateId } from "../../../utils/nanoid";
 import { getTagLabelByValue } from "../../../utils/toolkit";
 
 interface Props {
@@ -21,10 +23,11 @@ const Styles = {
 
 const TagPreview = (props: Props) => {
   const tags = getTagLabelByValue(props.tags);
+  const id = useRef(generateId(3));
   return (
     <Styles.Wrapper>
       {tags.map((e) => (
-        <Styles.SingleTag>{e}</Styles.SingleTag>
+        <Styles.SingleTag key={`${tags}-${id.current}`}>{e}</Styles.SingleTag>
       ))}
     </Styles.Wrapper>
   );

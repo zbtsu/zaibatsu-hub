@@ -1,5 +1,5 @@
 import React from "react";
-import { Control, Controller, DeepMap, UseFormRegister } from "react-hook-form";
+import { Control } from "react-hook-form";
 import styled from "styled-components";
 import ReactSelect from "react-select";
 import { ErrorPopup, FormControlWrapper, StyledLabel } from "./styles";
@@ -15,7 +15,7 @@ interface SelectProps {
 const StyledSelect = styled(ReactSelect)<SelectProps>`
   .Select__control {
     width: 100%;
-    height: 46px;
+    height: 49px;
     font-size: ${(props) => props.theme.fontSize[1]};
     border: ${(props) => (props.border ? "2px" : "0px")} solid
       ${(props) =>
@@ -125,11 +125,11 @@ const StyledSelect = styled(ReactSelect)<SelectProps>`
 `;
 
 type Option = {
-  value: string;
+  value: any;
   label: string;
 };
 
-interface Props {
+interface Props<T> {
   name: string;
   label?: string;
   items: Array<Option>;
@@ -137,17 +137,19 @@ interface Props {
   border?: boolean;
   multiple?: boolean;
   [key: string]: any;
+  formatter?: T;
 }
 
-const Select = ({
+const Select = <T extends (e: any) => any>({
   name,
   label,
   items,
   control,
   border = true,
   multiple,
+  formatter,
   ...rest
-}: Props) => {
+}: Props<T>) => {
   const {
     field: { ref, value, ...inputProps },
     formState: { errors },
@@ -157,7 +159,6 @@ const Select = ({
     rules: { required: true },
   });
   const error = errors[name];
-
   return (
     <FormControlWrapper>
       {label && <StyledLabel htmlFor={`input-${name}`}>{label}</StyledLabel>}
@@ -167,7 +168,7 @@ const Select = ({
         value={
           multiple
             ? items.filter((i) =>
-                value ? value.some((x: string) => x === i.value) : false
+                value ? value.some((x: string) => x === value) : false
               )
             : items.find((i) => i.value === value)
         }
@@ -178,7 +179,11 @@ const Select = ({
           inputProps.onChange({
             target: {
               name,
-              value: Array.isArray(e) ? e.map((x) => x.value) : e.value,
+              value: Array.isArray(e)
+                ? e.map((x) => (formatter ? formatter(x.value) : x.value))
+                : formatter
+                ? formatter(e.value)
+                : e.value,
             },
           });
         }}

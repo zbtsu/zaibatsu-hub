@@ -1,22 +1,23 @@
-import tags from "../data/tags";
 import Author from "./Author";
 import Comment from "./Comment";
 import firebase from "firebase/app";
-
-type ValueOf<T> = T[keyof T];
+import { generateId } from "../utils/nanoid";
 
 interface Props {
-  author?: ReturnType<typeof Author>;
+  id?: string;
+  author?: firebase.User;
   string: string;
   tags: string[];
-  damage: number;
+  damage: number | string;
   character: boolean;
   comments?: typeof Comment[];
-  date: string;
+  date?: string;
   name: string;
+  online?: boolean;
 }
 
 const Combo = ({
+  id,
   author,
   string,
   tags,
@@ -25,15 +26,17 @@ const Combo = ({
   damage,
   date,
   name,
+  online = false,
 }: Props) => ({
-  author,
+  id: id || generateId(32),
+  author: author ? Author(author) : undefined,
   string,
   tags,
   name,
   damage,
   character,
   comments,
-  date: date || firebase.firestore.FieldValue.serverTimestamp(),
+  date: online ? firebase.firestore.FieldValue.serverTimestamp() : new Date(),
 });
 
 export type ICombo = ReturnType<typeof Combo>;

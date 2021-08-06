@@ -8,13 +8,12 @@ interface ButtonWrapperProps {
   color?: keyof Omit<DefaultTheme["colors"], "trafficLights">;
   width?: string;
   smallPadding?: boolean;
+  noBorder?: boolean;
 }
 
-interface ButtonProps extends React.HTMLAttributes<HTMLButtonElement> {
-  color?: keyof Omit<DefaultTheme["colors"], "trafficLights">;
-  width?: string;
-  smallPadding?: boolean;
-}
+interface ButtonProps
+  extends ButtonWrapperProps,
+    Omit<React.HTMLAttributes<HTMLButtonElement>, keyof ButtonWrapperProps> {}
 
 export const ButtonWrapper = styled.button<ButtonWrapperProps>`
   background: ${(props) => props.theme.colors[props.color || "background"]};
@@ -25,7 +24,8 @@ export const ButtonWrapper = styled.button<ButtonWrapperProps>`
     }`};
   color: ${(props) =>
     mostReadable(props.theme.colors[props.color || "background"])};
-  border: 2px solid ${(props) => props.theme.colors[props.color || "border"]};
+  border: ${(p) => (p.noBorder ? "0px" : "2px")} solid
+    ${(props) => props.theme.colors[props.color || "border"]};
   cursor: pointer;
   outline: none;
   transition: ${(props) => props.theme.transition("background")};

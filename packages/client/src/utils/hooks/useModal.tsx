@@ -171,9 +171,6 @@ export const useModal = (
   const { content, title, subtitle } = useModalContent();
   const ref = useRef<HTMLDivElement | HTMLButtonElement>(null);
   const id = useRef(generateId());
-  const isModalOpen = useAppSelector(
-    (state) => state?.modal?.open === id.current
-  );
   const openModalFn = useAction(openModal);
   const closeModalFn = useAction(closeModal);
   const onClick = React.useCallback(() => {

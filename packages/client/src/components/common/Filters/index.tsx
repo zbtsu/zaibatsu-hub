@@ -33,7 +33,7 @@ const Filters = () => {
       tags,
       filter,
     });
-  }, [tags, filter]);
+  }, [tags, filter, changeFilterFn]);
   return (
     <Styles.Wrapper>
       <Row align="center" justify="space-between">

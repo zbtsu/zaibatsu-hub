@@ -1,10 +1,8 @@
 import React from "react";
-import styled, { useTheme } from "styled-components";
+import styled from "styled-components";
 import { ComboPreview } from "@zbtsu/combo-suite";
 import type { ICombo } from "../../../models/Combo";
-import { Center, Column, Margin, Row } from "../../../styles/Grid";
-import { getTagLabelByValue } from "../../../utils/toolkit";
-import tags from "../../../data/tags";
+import { Column, Margin, Row } from "../../../styles/Grid";
 import TagPreview from "./TagPreview";
 import { Avatar } from "../../../styles/Common";
 
@@ -12,7 +10,7 @@ interface Props extends ICombo {}
 
 const Styles = {
   Wrapper: styled.div`
-    padding: ${(p) => p.theme.space[3]} ${(p) => p.theme.space[5]};
+    padding: ${(p) => p.theme.space[3]} 0;
     & + & {
       border-top: 1px solid ${(p) => p.theme.colors.border};
     }
@@ -71,15 +69,17 @@ const SmallCombo = (props: Props) => {
       />
       <Margin gutter="3" />
       <Row align="center">
-        <Column size="3">
-          <Row align="center">
-            <Column fitContent>
-              <Avatar src={props.author?.photoUrl} />
-            </Column>
-            <Column fitContent>{props.author?.displayName}</Column>
-          </Row>
-        </Column>
-        <Column size="6">
+        {props.author && (
+          <Column size="3">
+            <Row align="center">
+              <Column fitContent>
+                <Avatar src={props.author?.photoURL || undefined} />
+              </Column>
+              <Column fitContent>{props.author?.displayName}</Column>
+            </Row>
+          </Column>
+        )}
+        <Column size="6" grow="1">
           <TagPreview tags={props.tags} />
         </Column>
       </Row>

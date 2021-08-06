@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { Column, Row } from "./Grid";
 
 export const PageHeaderStyle = styled.div`
   font-size: ${(props) => props.theme.fontSize[5]};
@@ -19,12 +20,26 @@ export const PageHeaderStyle = styled.div`
 
 interface PageHeaderProps {
   description?: string;
+  EndContent?: React.FC;
 }
 
-export const PageHeader: React.FC<PageHeaderProps> = (props) => (
+export const PageHeader: React.FC<PageHeaderProps> = ({
+  description,
+  EndContent,
+  children,
+}) => (
   <PageHeaderStyle>
-    <h1>{props.children}</h1>
-    {props.description && <h3>{props.description}</h3>}
+    <Row align="center" justify="space-between">
+      <Column size="10">
+        <h1>{children}</h1>
+        {description && <h3>{description}</h3>}
+      </Column>
+      {EndContent && (
+        <Column fitContent>
+          <EndContent />
+        </Column>
+      )}
+    </Row>
   </PageHeaderStyle>
 );
 
@@ -38,4 +53,8 @@ export const Avatar = styled.img`
   height: 100%;
   max-width: 36px;
   object-fit: cover;
+`;
+
+export const PageInner = styled.div`
+  padding: ${(p) => p.theme.space[3]} ${(p) => p.theme.space[5]};
 `;

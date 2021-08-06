@@ -21,7 +21,7 @@ const Wrapper = styled.div``;
 const AppSettings = () => {
   const initialValues = useAppSelector((state) => state.settings);
   const changeSettingsAction = useAction(changeSettings);
-  const { register, handleSubmit, formState, control } = useForm({
+  const { handleSubmit, control } = useForm({
     defaultValues: initialValues,
     resolver: yupResolver(AppSettingsValidation),
   });

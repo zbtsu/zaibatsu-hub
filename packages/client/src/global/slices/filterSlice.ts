@@ -1,5 +1,4 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Character } from "../../data/characters";
 
 const filterSlice = createSlice({
   name: "filters",

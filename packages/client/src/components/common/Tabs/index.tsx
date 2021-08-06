@@ -129,7 +129,7 @@ const TabHeaderSingle: React.FC<TabHeaderProps> = (props) => {
 const TabContentWrapper = styled.div`
   width: 100%;
   height: 100%;
-  padding: ${(props) => props.theme.space[3]};
+  /* padding: ${(props) => props.theme.space[3]}; */
 `;
 
 const AnimatedTabContentWrapper = animated(TabContentWrapper);
