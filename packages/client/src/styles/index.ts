@@ -11,6 +11,7 @@ export const GlobalStyle = createGlobalStyle`
     letter-spacing: -${(props) => props.theme.letterSpacing[1]};
     -webkit-font-smoothing: antialiased;
     -webkit-text-stroke: 0.1px;
+    background: transparent !important;
   }
 
   * {
@@ -18,6 +19,8 @@ export const GlobalStyle = createGlobalStyle`
     font-family: inherit;
     -webkit-font-smoothing: antialiased;
     -webkit-text-stroke: 0.1px;
+      /* background: transparent !important; */
+
   }
   iframe {
     width: 0% !important;

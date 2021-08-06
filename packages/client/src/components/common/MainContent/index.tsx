@@ -5,6 +5,7 @@ import Scrollable from "../Scrollable";
 const Wrapper = styled.div`
   flex: 1;
   max-height: 100%;
+  background: ${(p) => p.theme.colors.background};
 `;
 
 // const BigBox = styled.div`

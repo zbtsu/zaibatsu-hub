@@ -6,7 +6,6 @@
   "homepage": ".",
   "repository": "https://github.com/zbtsu/zaibatsu-hub/",
   "dependencies": {
-    "@zbtsu/combo-suite": "link:../combo-suite",
     "@hookform/resolvers": "^2.6.1",
     "@react-firebase/firestore": "^0.5.5",
     "@react-spring/web": "^9.2.4",
@@ -15,6 +14,8 @@
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
     "@use-gesture/react": "^10.0.0-beta.22",
+    "@zbtsu/combo-suite": "link:../combo-suite",
+    "electron-acrylic-window": "^0.5.8",
     "electron-log": "^4.4.0",
     "electron-store": "^8.0.0",
     "electron-updater": "^4.3.9",

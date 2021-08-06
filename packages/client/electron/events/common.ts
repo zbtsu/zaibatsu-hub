@@ -1,5 +1,6 @@
 import { WINDOW_EVENTS } from "../constants/events";
-import { BrowserWindow, dialog, ipcMain, screen, app } from "electron";
+import { dialog, ipcMain, screen, app } from "electron";
+import { BrowserWindow, setVibrancy, Vibrancy } from "electron-acrylic-window";
 import * as fs from "fs";
 import { buildURL } from "../utils";
 
@@ -15,35 +16,14 @@ type NWOpen = {
   onTop: boolean;
 };
 
-const makeNewWindow = (
-  atPath = "",
-  options: NWOpen,
-  __dirname: string,
-  transparent: boolean
-) => {
-  const DEFAULTS: Electron.BrowserWindowConstructorOptions = {
-    width: options.width,
-    height: options.height,
-    frame: false,
-    transparent,
-    x: options.x,
-    y: options.y,
-    alwaysOnTop: options.onTop,
-    webPreferences: {
-      // allowRunningInsecureContent: true,
-      nodeIntegration: true,
-      contextIsolation: false,
-    },
+const makeVibrancy = (theme: "light" | "dark"): Vibrancy => {
+  return {
+    theme: theme === "dark" ? "#15151500" : "#ffffff00",
+    effect: "acrylic",
+    useCustomWindowRefreshMethod: true,
+    disableOnBlur: true,
+    debug: false,
   };
-  let mainWindow: BrowserWindow;
-  mainWindow = new BrowserWindow({
-    ...DEFAULTS,
-  });
-
-  // const menu = Menu.buildFromTemplate(menuTemplate);
-  // Menu.setApplicationMenu(menu);
-  mainWindow.loadURL(buildURL(atPath));
-  return mainWindow;
 };
 
 function common(mainWindow: BrowserWindow, __dirname: string) {
@@ -63,6 +43,9 @@ function common(mainWindow: BrowserWindow, __dirname: string) {
     const window = BrowserWindow.fromWebContents(event.sender);
     window.close();
     // mainWindow.close();
+  });
+  ipcMain.on(WINDOW_EVENTS.SET_THEME, (event, theme: "light" | "dark") => {
+    setVibrancy(mainWindow, makeVibrancy(theme));
   });
 }
 

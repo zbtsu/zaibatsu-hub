@@ -96,7 +96,7 @@ export const AppContainer = styled.div`
   height: 100vh;
   max-height: 100vh;
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.background};
+  /* background: ${({ theme }) => theme.colors.background}; */
   display: flex;
   flex-direction: column;
 `;
@@ -107,7 +107,7 @@ export const AppContent = styled.div`
   display: flex;
   max-height: 100%;
   overflow: hidden;
-  background: ${({ theme }) => theme.colors.background};
+  /* background: ${({ theme }) => theme.colors.background}; */
 `;
 
 export const Separator = styled.div`

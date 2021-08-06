@@ -1,6 +1,6 @@
 import React from "react";
 import SettingsForms from "../../common/Settings";
-import { PageHeader, PageWrapper } from "../../../styles/Common";
+import { PageHeader, PageInner, PageWrapper } from "../../../styles/Common";
 import Tabs from "../../common/Tabs";
 import { useUser } from "reactfire";
 
@@ -11,7 +11,9 @@ const Settings = () => {
       <PageHeader description="Let's change some stuff.">Settings</PageHeader>
       <Tabs.Wrapper noTopBorder>
         <Tabs.Pane key="app-settings" title="App Settings">
-          <SettingsForms.App />
+          <PageInner>
+            <SettingsForms.App />
+          </PageInner>
         </Tabs.Pane>
         <Tabs.Pane
           key="profile-settings"
@@ -19,7 +21,9 @@ const Settings = () => {
           disabled={!user.data}
           disabledMessage="You need to be logged in to do that!"
         >
-          <SettingsForms.Profile />
+          <PageInner>
+            <SettingsForms.Profile />
+          </PageInner>
         </Tabs.Pane>
       </Tabs.Wrapper>
     </PageWrapper>

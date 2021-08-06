@@ -5,4 +5,5 @@ export const WINDOW_EVENTS = {
   ON_MAXIMIZE: "onMaximize",
   ON_MINIMIZE: "onMinimize",
   ON_CLOSE: "onClose",
+  SET_THEME: "setTheme",
 };

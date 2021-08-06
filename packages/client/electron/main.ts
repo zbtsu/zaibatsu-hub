@@ -1,4 +1,5 @@
-import { app, BrowserWindow, dialog, screen, Rectangle } from "electron";
+import { app, nativeTheme } from "electron";
+import { BrowserWindow } from "electron-acrylic-window";
 import * as events from "./events";
 import * as Store from "electron-store";
 import { buildURL } from "./utils";
@@ -31,6 +32,13 @@ const DEFAULTS: Electron.BrowserWindowConstructorOptions = {
   minWidth: 1100,
   autoHideMenuBar: true,
   // transparent: true,
+  vibrancy: {
+    theme: "#FFF",
+    effect: "acrylic",
+    useCustomWindowRefreshMethod: false,
+    disableOnBlur: true,
+    debug: false,
+  } as any,
   webPreferences: {
     allowRunningInsecureContent: false,
     nodeIntegration: true,
