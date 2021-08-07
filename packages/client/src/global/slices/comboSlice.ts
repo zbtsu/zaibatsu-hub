@@ -10,11 +10,11 @@ const removeFromArrayWithId = (arr: ICombo[], combos: ICombo) => {
   return newArr;
 };
 
-const editComboInArray = (arr: ICombo[], combos: ICombo) => {
+const editComboInArray = (arr: ICombo[], combo: ICombo) => {
   const newArr = [...arr];
-  const index = newArr.findIndex((combo) => combo.id === combos.id);
+  const index = newArr.findIndex((combo) => combo.id === combo.id);
   if (index > -1) {
-    newArr[index] = combos;
+    newArr[index] = { ...newArr[index], ...combo };
   }
   return newArr;
 };

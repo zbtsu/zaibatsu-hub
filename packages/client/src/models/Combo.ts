@@ -9,7 +9,7 @@ interface Props {
   string: string;
   tags: string[];
   damage: number | string;
-  character: boolean;
+  character: number;
   comments?: typeof Comment[];
   date?: string;
   name: string;

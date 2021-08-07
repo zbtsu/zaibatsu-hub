@@ -5,6 +5,7 @@ import type { ICombo } from "../../../models/Combo";
 import { Column, Margin, Row } from "../../../styles/Grid";
 import TagPreview from "./TagPreview";
 import { Avatar } from "../../../styles/Common";
+import { getCharacterById, getCharacterNameById } from "../../../utils/toolkit";
 
 interface Props extends ICombo {}
 
@@ -44,11 +45,22 @@ const StyledComboPreview = styled(ComboPreview)`
 `;
 
 const SmallCombo = (props: Props) => {
+  const cName = React.useMemo(
+    () => getCharacterById(props.character),
+    [props.character]
+  );
   return (
     <Styles.Wrapper>
       <Row align="center">
         <Column size="6">
-          <Styles.Name>{props.name}</Styles.Name>
+          <Row align="center">
+            <Column fitContent>
+              <Avatar src={cName?.thumb} />
+            </Column>
+            <Column>
+              <Styles.Name>{props.name}</Styles.Name>
+            </Column>
+          </Row>
         </Column>
         <Column size="6">
           <Row align="center" justify="flex-end">
