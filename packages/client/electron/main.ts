@@ -127,6 +127,7 @@ app.on("window-all-closed", () => {
 });
 
 app.setAsDefaultProtocolClient("zaibatsu");
+app.requestSingleInstanceLock();
 
 app.on("activate", () => {
   if (mainWindow === null) {
