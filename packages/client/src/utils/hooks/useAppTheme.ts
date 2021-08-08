@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useMediaMatch } from "rooks";
 import { useAppSelector } from "../../global/hooks";
 import { useVibrancyService } from "../../services/useVibrancyService";

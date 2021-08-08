@@ -5,7 +5,13 @@ import type { ICombo } from "../../../models/Combo";
 import { Column, Margin, Row } from "../../../styles/Grid";
 import TagPreview from "./TagPreview";
 import { Avatar } from "../../../styles/Common";
-import { getCharacterById, getCharacterNameById } from "../../../utils/toolkit";
+import { getCharacterById } from "../../../utils/toolkit";
+import { Button } from "../Form/Button";
+import useIsComboLocalOrOwner from "../../../utils/hooks/useIsComboLocal";
+import { useHistory } from "react-router-dom";
+import { useActions } from "../../../utils/hooks/useAction";
+import { removeCombo } from "../../../global/slices/comboSlice";
+import { addForEdit } from "../../../global/slices/editSlice";
 
 interface Props extends ICombo {}
 
@@ -49,6 +55,9 @@ const SmallCombo = (props: Props) => {
     () => getCharacterById(props.character),
     [props.character]
   );
+  const isOffline = useIsComboLocalOrOwner(props);
+  const [deleteComboFn, addForEditFn] = useActions([removeCombo, addForEdit]);
+  const history = useHistory();
   return (
     <Styles.Wrapper>
       <Row align="center">
@@ -95,6 +104,40 @@ const SmallCombo = (props: Props) => {
           <TagPreview tags={props.tags} />
         </Column>
       </Row>
+      {isOffline && (
+        <Row>
+          <Column size="12">
+            <Margin />
+          </Column>
+          <Column size="6"></Column>
+          <Column size="3">
+            <Button
+              width="100%"
+              onClick={() => {
+                addForEditFn({
+                  data: props,
+                  type: "combo",
+                });
+                history.push(`/edit/combo`);
+              }}
+            >
+              Edit Combo
+            </Button>
+          </Column>
+          <Column size="3">
+            <Button
+              width="100%"
+              onClick={() => {
+                if (isOffline) {
+                  deleteComboFn(props);
+                }
+              }}
+            >
+              Remove Combo
+            </Button>
+          </Column>
+        </Row>
+      )}
     </Styles.Wrapper>
   );
 };

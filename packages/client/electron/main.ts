@@ -39,6 +39,7 @@ const DEFAULTS: Electron.BrowserWindowConstructorOptions = {
     disableOnBlur: true,
     debug: false,
   } as any,
+
   webPreferences: {
     allowRunningInsecureContent: false,
     nodeIntegration: true,
@@ -51,7 +52,7 @@ const DEFAULTS: Electron.BrowserWindowConstructorOptions = {
 function createWindow() {
   const winBounds = store.get<string>("winBounds") as {
     bounds: any;
-    isMaximised: boolean;
+    maximized: boolean;
   };
   const options: Electron.BrowserWindowConstructorOptions = Object.assign(
     { ...DEFAULTS },
@@ -61,12 +62,19 @@ function createWindow() {
   mainWindow = new BrowserWindow({
     ...options,
   });
+  // if (winBounds.maximized) {
+  //   mainWindow.maximize();
+  // }
   const setWindowBounds = () => {
     if (!mainWindow) return;
-    store.set("winBounds", {
-      bounds: mainWindow.getBounds(),
-      maximized: mainWindow.isMaximized() || mainWindow.isFullScreen(),
-    });
+    const maximized = mainWindow.isMaximized() || mainWindow.isFullScreen();
+    const bounds = mainWindow.getBounds();
+    const boundsObj = {
+      bounds,
+      maximized,
+    };
+    console.log({ boundsObj });
+    store.set("winBounds", boundsObj);
   };
   mainWindow.loadURL(buildURL(""));
 
@@ -75,14 +83,12 @@ function createWindow() {
   });
 
   mainWindow.on("resized", () => {
-    store.set("winBounds", setWindowBounds);
+    setWindowBounds();
   });
   mainWindow.webContents.on("did-create-window", (childWindow) => {
     // For example...
-    childWindow;
   });
   mainWindow.webContents.setWindowOpenHandler(({ url }) => {
-    console.log(url);
     return {
       action: "allow",
       overrideBrowserWindowOptions: {
@@ -95,7 +101,7 @@ function createWindow() {
       WINDOW_EVENTS.ON_MAXIMIZE,
       mainWindow.isMaximized()
     );
-    store.set("winBounds", setWindowBounds);
+    setWindowBounds();
   });
 
   mainWindow.on("unmaximize", () => {
@@ -127,6 +133,11 @@ app.on("window-all-closed", () => {
 });
 
 app.setAsDefaultProtocolClient("zaibatsu");
+
+app.on("open-url", function (event, url) {
+  event.preventDefault();
+  console.log({ event, url });
+});
 
 app.on("activate", () => {
   if (mainWindow === null) {

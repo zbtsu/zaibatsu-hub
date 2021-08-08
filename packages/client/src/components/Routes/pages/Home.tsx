@@ -11,6 +11,7 @@ import { Button } from "../../common/Form/Button";
 import { IoAdd } from "react-icons/io5";
 import { useHistory } from "react-router-dom";
 import Tabs from "../../common/Tabs";
+import { hasCharacter, hasTags } from "../../../utils/toolkit";
 
 const OnlineCombos = () => {
   const { filter, tags } = useAppSelector((state) => state.filters);
@@ -38,18 +39,12 @@ const OnlineCombos = () => {
 
 const LocalCombos = () => {
   const { filter, tags } = useAppSelector((state) => state.filters);
-  const localCombos = useAppSelector((state) => state.combos.all);
-  // const combosRef = useMemo(() => {
-  //   let combos = fireStore.collection("combos");
-  //   if (tags.length)
-  //     combos = combos.where(`tags`, `array-contains-any`, tags) as any;
-
-  //   if (filter) {
-  //   }
-
-  //   return combos;
-  // }, [fireStore, tags, filter]);
-
+  const localCombos = useAppSelector((state) => {
+    const selectedCharacters = state.characters.selected;
+    return state.combos.all
+      .filter(hasTags(tags))
+      .filter(hasCharacter(selectedCharacters.map(({ id }) => id)));
+  });
   return (
     <>
       {localCombos?.map((e) => (

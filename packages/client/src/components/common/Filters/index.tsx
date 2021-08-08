@@ -40,7 +40,7 @@ const Filters = () => {
         <Column size="4">
           <Select
             name="tags"
-            multiple
+            isMulti
             control={control}
             border={false}
             items={TagOptions}

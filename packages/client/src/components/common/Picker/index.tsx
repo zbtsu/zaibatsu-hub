@@ -24,7 +24,8 @@ const Wrapper = styled.div`
 `;
 
 const CharacterStyles = {
-  Wrapper: styled.div`
+  Wrapper: styled.div<{ none?: boolean }>`
+    ${(p) => p.none && `border-bottom: 1px solid ${p.theme.colors.border}`};
     display: flex;
     width: 100%;
     /* border-bottom: 1px solid ${(props) => props.theme.colors.border}; */
@@ -80,7 +81,7 @@ const CharacterStyles = {
 
 const AnimatedSelectWrapper = animated(CharacterStyles.Selected);
 
-const SingleCharacter = (props: Character) => {
+const SingleCharacter = (props: Character & { none?: boolean }) => {
   const [ref, ripples] = useRippleEffect();
   const isSelected = useAppSelector((state) =>
     state.characters.selected.map((c) => c.id).includes(props.id)
@@ -108,6 +109,32 @@ const SingleCharacter = (props: Character) => {
   const selectCharacterFn = useAction(selectCharacter);
   const deselectCharacterFn = useAction(deselectCharacter);
   const theme = useTheme();
+  if (props.none) {
+    return (
+      <CharacterStyles.Wrapper
+        none
+        ref={ref}
+        onClick={() => {
+          if (props.none) {
+            return deselectCharacterFn("all");
+          }
+          if (isSelected) {
+            deselectCharacterFn([props]);
+          } else {
+            selectCharacterFn([props]);
+          }
+        }}
+      >
+        {ripples}
+        <CharacterStyles.Description>
+          <CharacterStyles.Text>Deselect all</CharacterStyles.Text>
+          <AnimatedSelectWrapper style={checkSpring}>
+            <SiCheckmarx color={theme.colors.success} />
+          </AnimatedSelectWrapper>
+        </CharacterStyles.Description>
+      </CharacterStyles.Wrapper>
+    );
+  }
   return (
     <CharacterStyles.Wrapper
       ref={ref}
@@ -232,6 +259,7 @@ const Picker = () => {
         </Column>
         <Column shrink="0" height="100%">
           <Scrollable>
+            <SingleCharacter none id={0} name="" image="" thumb="" />
             {characters?.map((e) => {
               return <SingleCharacter key={e.id + e.name} {...e} />;
             })}

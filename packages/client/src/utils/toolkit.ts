@@ -1,7 +1,9 @@
-import { createPipe, filter, isTruthy, prop } from "remeda";
+import { createPipe, filter, identity, isTruthy, prop } from "remeda";
 import tinycolor from "tinycolor2";
 import characters, { Character } from "../data/characters";
 import { TagOptions } from "../data/tags";
+import { store } from "../global/createStore";
+import { ICombo } from "../models/Combo";
 
 type AnyObject = Record<string | number, any>;
 
@@ -84,4 +86,28 @@ export const getCharacterNameById = (id: number) => {
 };
 export const getCharacterById = (id: number) => {
   return characters.find((c) => c.id === id);
+};
+
+export const ifFormatterFormatValue = (value: any, formatter = identity) => {
+  return formatter(value) as ReturnType<typeof formatter>;
+};
+
+export const formatterOrValue =
+  (formatter = identity) =>
+  (value: any) => {
+    return formatter(value) as ReturnType<typeof formatter>;
+  };
+
+export const hasTags = (tags: string[]) => {
+  return (combo: ICombo) => {
+    return tags.length ? tags.some((tag) => combo.tags.includes(tag)) : true;
+  };
+};
+
+export const hasCharacter = (character: number[]) => {
+  return (combo: ICombo) => {
+    return character.length
+      ? character.some((c) => combo.character === c)
+      : true;
+  };
 };

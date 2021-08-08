@@ -30,7 +30,13 @@ const characterSlice = createSlice({
         selected: removeDuplicatesById(newSelected),
       };
     },
-    deselectCharacter: (state, action: PayloadAction<Character[]>) => {
+    deselectCharacter: (state, action: PayloadAction<Character[] | "all">) => {
+      if (action.payload === "all") {
+        return {
+          ...state,
+          selected: [],
+        };
+      }
       return {
         ...state,
         selected: removeFromArrayWithIds(state.selected, action.payload),

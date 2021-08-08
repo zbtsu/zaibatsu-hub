@@ -37,6 +37,7 @@ const Combo = ({
   character,
   comments,
   date: online ? firebase.firestore.FieldValue.serverTimestamp() : new Date(),
+  online,
 });
 
 export type ICombo = ReturnType<typeof Combo>;

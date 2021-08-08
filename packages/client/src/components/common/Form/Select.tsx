@@ -5,7 +5,7 @@ import ReactSelect from "react-select";
 import { ErrorPopup, FormControlWrapper, StyledLabel } from "./styles";
 import { hexToRgb } from "../../../utils/hextorgb";
 import { useController } from "react-hook-form";
-import { mostReadable } from "../../../utils/toolkit";
+import { formatterOrValue, mostReadable } from "../../../utils/toolkit";
 
 interface SelectProps {
   error?: boolean | string;
@@ -135,7 +135,7 @@ interface Props<T> {
   items: Array<Option>;
   control: Control<any>;
   border?: boolean;
-  multiple?: boolean;
+  isMulti?: boolean;
   [key: string]: any;
   formatter?: T;
 }
@@ -146,7 +146,7 @@ const Select = <T extends (e: any) => any>({
   items,
   control,
   border = true,
-  multiple,
+  isMulti,
   formatter,
   ...rest
 }: Props<T>) => {
@@ -159,17 +159,36 @@ const Select = <T extends (e: any) => any>({
     rules: { required: true },
   });
   const error = errors[name];
+  const formatValue = formatterOrValue(formatter);
+  console.log({ value, items });
+  console.log({
+    value: isMulti
+      ? items.filter((i) => {
+          console.log({ hasValue: Boolean(value) });
+          return value
+            ? value.some((x: string) => {
+                console.log({ x, i });
+                return x === i.value;
+              })
+            : false;
+        })
+      : items.find((i) => i.value === value),
+  });
   return (
     <FormControlWrapper>
       {label && <StyledLabel htmlFor={`input-${name}`}>{label}</StyledLabel>}
       <StyledSelect
         border={border}
-        isMulti={multiple}
+        isMulti={isMulti}
         value={
-          multiple
-            ? items.filter((i) =>
-                value ? value.some((x: string) => x === value) : false
-              )
+          isMulti
+            ? items.filter((i) => {
+                return value
+                  ? value.some((x: string) => {
+                      return x === i.value;
+                    })
+                  : false;
+              })
             : items.find((i) => i.value === value)
         }
         classNamePrefix="Select"
@@ -180,10 +199,8 @@ const Select = <T extends (e: any) => any>({
             target: {
               name,
               value: Array.isArray(e)
-                ? e.map((x) => (formatter ? formatter(x.value) : x.value))
-                : formatter
-                ? formatter(e.value)
-                : e.value,
+                ? e.map((x) => formatValue(x.value))
+                : formatValue(e.value),
             },
           });
         }}
