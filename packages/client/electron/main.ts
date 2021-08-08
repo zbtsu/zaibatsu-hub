@@ -133,6 +133,7 @@ app.on("window-all-closed", () => {
 });
 
 app.setAsDefaultProtocolClient("zaibatsu");
+app.requestSingleInstanceLock();
 
 app.on("open-url", function (event, url) {
   event.preventDefault();
