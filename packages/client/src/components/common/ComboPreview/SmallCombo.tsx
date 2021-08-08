@@ -10,10 +10,13 @@ import { Button } from "../Form/Button";
 import useIsComboLocalOrOwner from "../../../utils/hooks/useIsComboLocal";
 import { useHistory } from "react-router-dom";
 import { useActions } from "../../../utils/hooks/useAction";
-import { removeCombo } from "../../../global/slices/comboSlice";
+import { addCombo, removeCombo } from "../../../global/slices/comboSlice";
 import { addForEdit } from "../../../global/slices/editSlice";
+import Combo from "../../../models/Combo";
 
-interface Props extends ICombo {}
+interface Props extends ICombo {
+  noBottom?: boolean;
+}
 
 const Styles = {
   Wrapper: styled.div`
@@ -55,8 +58,12 @@ const SmallCombo = (props: Props) => {
     () => getCharacterById(props.character),
     [props.character]
   );
-  const isOffline = useIsComboLocalOrOwner(props);
-  const [deleteComboFn, addForEditFn] = useActions([removeCombo, addForEdit]);
+  const canEdit = useIsComboLocalOrOwner(props);
+  const [deleteComboFn, addForEditFn, saveComboFn] = useActions([
+    removeCombo,
+    addForEdit,
+    addCombo,
+  ]);
   const history = useHistory();
   return (
     <Styles.Wrapper>
@@ -104,38 +111,55 @@ const SmallCombo = (props: Props) => {
           <TagPreview tags={props.tags} />
         </Column>
       </Row>
-      {isOffline && (
+
+      {!props.noBottom && (
         <Row>
           <Column size="12">
             <Margin />
           </Column>
-          <Column size="6"></Column>
-          <Column size="3">
-            <Button
-              width="100%"
-              onClick={() => {
-                addForEditFn({
-                  data: props,
-                  type: "combo",
-                });
-                history.push(`/edit/combo`);
-              }}
-            >
-              Edit Combo
-            </Button>
-          </Column>
-          <Column size="3">
-            <Button
-              width="100%"
-              onClick={() => {
-                if (isOffline) {
-                  deleteComboFn(props);
-                }
-              }}
-            >
-              Remove Combo
-            </Button>
-          </Column>
+          <Column size={canEdit ? "6" : "9"}></Column>
+          {!canEdit && (
+            <Column size="3">
+              <Button
+                width="100%"
+                onClick={() => {
+                  saveComboFn(Combo(props));
+                }}
+              >
+                Save Combo
+              </Button>
+            </Column>
+          )}
+          {canEdit && (
+            <Column size="3">
+              <Button
+                width="100%"
+                onClick={() => {
+                  addForEditFn({
+                    data: props,
+                    type: "combo",
+                  });
+                  history.push(`/edit/combo`);
+                }}
+              >
+                Edit Combo
+              </Button>
+            </Column>
+          )}
+          {canEdit && (
+            <Column size="3">
+              <Button
+                width="100%"
+                onClick={() => {
+                  if (canEdit) {
+                    deleteComboFn(props);
+                  }
+                }}
+              >
+                Remove Combo
+              </Button>
+            </Column>
+          )}
         </Row>
       )}
     </Styles.Wrapper>

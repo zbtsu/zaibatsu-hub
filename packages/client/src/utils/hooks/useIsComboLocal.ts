@@ -16,4 +16,12 @@ const useIsComboLocalOrOwner = (props: ICombo) => {
   return isLocal;
 };
 
+const useCanSaveCombo = (props: ICombo) => {
+  const isLocal = useIsComboLocalOrOwner(props);
+  const user = useUser();
+  if (isLocal) {
+    return false;
+  }
+};
+
 export default useIsComboLocalOrOwner;

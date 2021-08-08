@@ -109,7 +109,10 @@ const ComboForm = (props: Props) => {
           />
         </Column>
         <Column size="12">
-          <SmallCombo {...({ name, tags, string, damage, character } as any)} />
+          <SmallCombo
+            noBottom
+            {...({ name, tags, string, damage, character } as any)}
+          />
         </Column>
         <Column justify="flex-end">
           <Button>Save</Button>

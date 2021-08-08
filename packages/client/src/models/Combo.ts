@@ -1,17 +1,17 @@
-import Author from "./Author";
+import Author, { IAuthor } from "./Author";
 import Comment from "./Comment";
 import firebase from "firebase/app";
 import { generateId } from "../utils/nanoid";
 
 interface Props {
   id?: string;
-  author?: firebase.User;
+  author?: firebase.User | IAuthor;
   string: string;
   tags: string[];
   damage: number | string;
   character: number;
   comments?: typeof Comment[];
-  date?: string;
+  date?: string | firebase.firestore.FieldValue | Date;
   name: string;
   online?: boolean;
 }
