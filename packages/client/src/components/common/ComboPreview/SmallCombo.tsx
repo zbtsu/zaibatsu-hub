@@ -71,7 +71,7 @@ const SmallCombo = (props: Props) => {
         <Column size="6">
           <Row align="center">
             <Column fitContent>
-              <Avatar src={cName?.thumb} />
+              <Avatar src={cName?.image} />
             </Column>
             <Column>
               <Styles.Name>{props.name}</Styles.Name>

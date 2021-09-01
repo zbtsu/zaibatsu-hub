@@ -2,7 +2,7 @@ import { app, nativeTheme } from "electron";
 import { BrowserWindow } from "electron-acrylic-window";
 import * as events from "./events";
 import * as Store from "electron-store";
-import { buildURL } from "./utils";
+import { buildURL, makeVibrancy } from "./utils";
 import { WINDOW_EVENTS } from "./constants/events";
 
 // import * as vibrancy from "electron-vibrancy";
@@ -32,14 +32,7 @@ const DEFAULTS: Electron.BrowserWindowConstructorOptions = {
   minWidth: 1100,
   autoHideMenuBar: true,
   // transparent: true,
-  vibrancy: {
-    theme: "#FFF",
-    effect: "acrylic",
-    useCustomWindowRefreshMethod: false,
-    disableOnBlur: true,
-    debug: false,
-  } as any,
-
+  vibrancy: makeVibrancy("light") as any,
   webPreferences: {
     allowRunningInsecureContent: false,
     nodeIntegration: true,

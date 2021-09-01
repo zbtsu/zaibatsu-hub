@@ -5,6 +5,7 @@ import Settings from "./pages/Settings";
 import Home from "./pages/Home";
 import NewCombo from "./pages/new/NewCombo";
 import EditCombo from "./pages/edit/EditCombo";
+import ProtectedRoute from "../common/ProtectedRoute";
 
 const Routes = {
   Wrapper: Router,
@@ -18,21 +19,15 @@ const Routes = {
           <Route path="/combos" exact>
             <div>Combos</div>
           </Route>
-          <Route path="/hub" exact>
-            <div>Hub</div>
-          </Route>
-          <Route path="/guides" exact>
-            <div>Guides</div>
-          </Route>
           <Route path="/settings" exact>
             <Settings />
           </Route>
-          <Route path="/new/combo" exact>
+          <ProtectedRoute path="/new/combo" exact>
             <NewCombo />
-          </Route>
-          <Route path="/edit/combo" exact>
+          </ProtectedRoute>
+          <ProtectedRoute path="/edit/combo" exact>
             <EditCombo />
-          </Route>
+          </ProtectedRoute>
         </Switch>
       </MainContent>
     );

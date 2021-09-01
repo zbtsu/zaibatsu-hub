@@ -10,7 +10,7 @@ import { isMac } from "../../utils/toolkit";
 import { Close, Maximize, Minimize, Unmaximize } from "./icons";
 
 const Wrapper = styled.div`
-  /* background: ${(p) => p.theme.colors.background}; */
+  background: ${(p) => p.theme.colors.background};
   width: 100%;
   height: 32px;
   -webkit-app-region: drag;

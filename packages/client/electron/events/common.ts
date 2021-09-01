@@ -2,7 +2,7 @@ import { WINDOW_EVENTS } from "../constants/events";
 import { dialog, ipcMain, screen, app } from "electron";
 import { BrowserWindow, setVibrancy, Vibrancy } from "electron-acrylic-window";
 import * as fs from "fs";
-import { buildURL } from "../utils";
+import { buildURL, makeVibrancy } from "../utils";
 
 function percentage(num: number, per: number) {
   return (num / 100) * per;
@@ -14,16 +14,6 @@ type NWOpen = {
   width: number;
   height: number;
   onTop: boolean;
-};
-
-const makeVibrancy = (theme: "light" | "dark"): Vibrancy => {
-  return {
-    theme: theme === "dark" ? "#15151500" : "#ffffff00",
-    effect: "acrylic",
-    useCustomWindowRefreshMethod: true,
-    disableOnBlur: true,
-    debug: false,
-  };
 };
 
 function common(mainWindow: BrowserWindow, __dirname: string) {

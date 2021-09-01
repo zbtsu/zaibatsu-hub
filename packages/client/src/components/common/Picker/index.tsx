@@ -12,13 +12,14 @@ import {
   selectCharacter,
 } from "../../../global/slices/characterSlice";
 import { Column, Row } from "../../../styles/Grid";
-import { hexToRgb } from "../../../utils/hextorgb";
+import { hexToRGBAString } from "../../../utils/hextorgb";
 import useAction from "../../../utils/hooks/useAction";
 import useRippleEffect from "../../../utils/hooks/useRippleEffect";
 import Scrollable from "../Scrollable";
 import { searchInCharacterArrayByName } from "../../../utils/toolkit";
 
 const Wrapper = styled.div`
+  background: ${(p) => hexToRGBAString(p.theme.colors.background, 0.9)};
   border-right: 1px solid ${(props) => props.theme.colors.border};
   width: 152px;
 `;
@@ -34,7 +35,7 @@ const CharacterStyles = {
     user-select: none;
     &:hover {
       background-color: ${(props) =>
-        `rgba(${hexToRgb(props.theme.colors.text)},0.025)`};
+        hexToRGBAString(props.theme.colors.text, 0.05)};
     }
   `,
   Image: styled.div`

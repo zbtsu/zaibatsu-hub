@@ -14,7 +14,7 @@ import {
 } from "./icons";
 import { useHistory } from "react-router-dom";
 import useRippleEffect from "../../utils/hooks/useRippleEffect";
-import { hexToRgb } from "../../utils/hextorgb";
+import { hexToRgb, hexToRGBAString } from "../../utils/hextorgb";
 import { useModal } from "../../utils/hooks/useModal";
 import mergeRefs from "../../utils/mergeRefs";
 import AuthModal from "../common/Modal/AuthModal";
@@ -23,6 +23,7 @@ import RelativeSuspense from "../common/RelativeSuspense";
 import { Avatar } from "../../styles/Common";
 
 const Wrapper = styled.div`
+  background: ${(p) => hexToRGBAString(p.theme.colors.background, 0.9)};
   border-right: 1px solid ${(props) => props.theme.colors.border};
   width: 92px;
   display: flex;
@@ -53,16 +54,17 @@ const sideBar: IconRoute[] = [
     route: "/combos",
     title: "Combos",
   },
-  {
-    icon: Share,
-    route: "/hub",
-    title: "Hub",
-  },
-  {
-    icon: Guide,
-    route: "/guides",
-    title: "Guides",
-  },
+  // {
+  //   icon: Share,
+  //   route: "/hub",
+  //   title: "Hub",
+  // },
+  // {
+  //   TBA
+  //   icon: Guide,
+  //   route: "/guides",
+  //   title: "Guides",
+  // },
 ];
 
 const IconHolder = styled.span`
